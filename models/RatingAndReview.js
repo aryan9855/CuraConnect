@@ -1,0 +1,20 @@
+const mongoose = require("mongoose")
+
+const ratingAndReviewSchema = new mongoose.Schema({
+    
+    patient:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"User"
+    },
+    rating:{
+        type:Number,
+        required:true
+    },
+    review:{
+        type:Number,
+        required:true
+    }
+
+});
+module.exports = mongoose.model("RatingAndReview",ratingAndReviewSchema)
