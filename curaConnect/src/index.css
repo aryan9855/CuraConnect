@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes ecg {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  
