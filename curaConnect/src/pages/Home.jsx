@@ -5,6 +5,9 @@ import HighlightText from '../components/core/HomePage/HighlightText'
 import CTAButton from '../components/core/HomePage/Button'
 import docHome from "../assets/Images/docHome.mp4"
 import CodeBlocks from '../components/core/HomePage/CodeBlocks'
+import TimelineSection from '../components/core/HomePage/TimelineSection'
+import LearningHealthcare from '../components/core/HomePage/LearningHealthcare'
+
 
 function Home() {
   return (
@@ -78,19 +81,61 @@ function Home() {
 
       />
     </div>
-
-
-    
-
-
-
-
     </div>
 
     
 
-      {/*Section 2*/}
+{/* Section 2 */}
+<div className="bg-pure-greys-5 text-richblack-700 py-20">
 
+  <div className="flex justify-center">
+    <div className="homepage_bg w-11/12 max-w-maxContent rounded-lg">
+
+      {/* CONTENT WRAPPER */}
+      <div className="relative z-10 px-12 py-14 space-y-24 text-white">
+
+        {/* ================= TOP CTA ================= */}
+        <div className="flex justify-center gap-7">
+          <CTAButton active linkto="/signup">
+            <div className="flex items-center gap-3">
+              Explore Full catalog <FaArrowRight />
+            </div>
+          </CTAButton>
+
+          <CTAButton active={false} linkto="/signup">
+            Learn more
+          </CTAButton>
+        </div>
+
+        {/* ================= SKILLS SECTION ================= */}
+        <div className="flex justify-between items-start ">
+
+          <div className="text-4xl font-semibold w-[45%] text-black">
+            Get the Skills you need for a
+            <HighlightText text=" Job that is in demand" />
+          </div>
+
+          <div className="flex flex-col gap-6 w-[40%]">
+            <p className="text-black font-semibold">
+              The modern healthcare ecosystem demands more than basic skills.
+              CuraConnect helps you stay ahead with expert-led learning.
+            </p>
+
+            <CTAButton active linkto="/signup">
+              Learn more
+            </CTAButton>
+          </div>
+
+        </div>
+
+        <TimelineSection />
+
+        <LearningHealthcare />
+
+      </div>
+    </div>
+  </div>
+</div>
 
 
       {/*Section 3*/}

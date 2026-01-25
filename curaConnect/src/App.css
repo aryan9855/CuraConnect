@@ -5,3 +5,14 @@
 html , body {
     overflow-x : hidden
 }
+
+.homepage_bg {
+    background-image: url("/src/assets/Images/bg2.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  
+  
+  
