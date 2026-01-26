@@ -9,6 +9,8 @@ import TimelineSection from '../components/core/HomePage/TimelineSection'
 import LearningHealthcare from '../components/core/HomePage/LearningHealthcare'
 import DoctorSection from '../components/core/HomePage/DoctorSection'
 import Footer from '../components/core/HomePage/common/Footer'
+import ExploreMore from '../components/core/HomePage/ExploreMore'
+
 
 function Home() {
   return (
@@ -33,7 +35,7 @@ function Home() {
           <HighlightText text={" Smarter Healthcare"} />
         </div>
 
-        <div className='mt-4 w-[90%] text-center text-lg text-richblack-300'>
+        <div className='mt-4 w-[90%] text-center text-lg font-bold'>
           CuraConnect lets you explore reliable healthcare information on your own schedule, connect with medical experts,
           watch informative videos across different healthcare fields, and easily book online or in-person appointments—all from one simple platform.
         </div>
@@ -82,12 +84,16 @@ function Home() {
 
           />
         </div>
+
+              <ExploreMore/>
+
+
       </div>
 
 
 
       {/* Section 2 */}
-      <div className="bg-pure-greys-5 text-richblack-700 py-20">
+      <div className="bg-pure-greys-5 text-richblack-700 py-20 mt-5">
 
         <div className="flex justify-center">
           <div className="homepage_bg w-11/12 max-w-maxContent rounded-lg">
@@ -99,7 +105,7 @@ function Home() {
               <div className="flex justify-center gap-7">
                 <CTAButton active linkto="/signup">
                   <div className="flex items-center gap-3">
-                    Explore Full catalog <FaArrowRight />
+                    Explore Full catalog
                   </div>
                 </CTAButton>
 
@@ -109,7 +115,7 @@ function Home() {
               </div>
 
               {/* ================= SKILLS SECTION ================= */}
-              <div className="flex justify-between items-start ">
+              <div className="flex justify-between items-start mt-5">
 
                 <div className="text-4xl font-semibold w-[45%] text-black text-center">
                   Learn the skills you need for
@@ -121,10 +127,12 @@ function Home() {
                     The modern healthcare ecosystem demands more than basic skills.
                     CuraConnect helps you stay ahead with expert-led learning.
                   </p>
-
+                  <div className='w-fit'>
                   <CTAButton active linkto="/signup">
                     Learn more
                   </CTAButton>
+                  </div>
+                  
                 </div>
 
               </div>

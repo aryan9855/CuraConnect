@@ -2,7 +2,6 @@ import React from 'react'
 import docimg from"../../../assets/Images/docimg.jpg"
 import HighlightText from './HighlightText'
 import CTAButton from '../HomePage/Button'
-import { FaArrowRight } from 'react-icons/fa'
 
 function DoctorSection() {
   return (
@@ -28,7 +27,6 @@ function DoctorSection() {
                     <CTAButton active={true} linkto ={"/signup"}>
                 <div className='flex flex-row gap-2 items-center'>
                 Join as a Doctor
-                <FaArrowRight/>
                 </div>
                 
                 </CTAButton>

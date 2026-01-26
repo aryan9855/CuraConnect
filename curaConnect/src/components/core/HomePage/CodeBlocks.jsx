@@ -1,7 +1,5 @@
 import React from "react";
 import CTAButton from "./Button";
-import HighlightText from "./HighlightText";
-import { FaArrowRight } from "react-icons/fa";
 import ECGCard from "./ECGCard";
 
 function CodeBlocks({
@@ -18,7 +16,7 @@ function CodeBlocks({
       <div className="w-[50%] flex flex-col gap-8">
         {heading}
 
-        <div className="text-richblack-300 font-bold">
+        <div className=" font-bold">
           {subheading}
         </div>
 
@@ -26,7 +24,7 @@ function CodeBlocks({
           <CTAButton active={ctabtn1.active} linkto={ctabtn1.linkto}>
             <div className="flex gap-2 items-center">
               {ctabtn1.btnText}
-              <FaArrowRight />
+              
             </div>
           </CTAButton>
 
