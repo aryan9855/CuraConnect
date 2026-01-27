@@ -2,6 +2,7 @@ import './App.css'
 import { Route,Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import DotGrid from './components/DotGrid'
+import Navbar from './components/core/HomePage/common/Navbar'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         />
       </div>
       <div className="relative z-10">
+        <Navbar/>
         <Routes>
           <Route path ="/" element={<Home/>}/>
         </Routes>
