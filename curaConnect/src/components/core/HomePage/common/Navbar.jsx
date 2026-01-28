@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import curaConnectLogo from "../../../../assets/Images/curaConnectLogo.jpg"
+import curaConnectLogo from "../../../../assets/Images/CuraConnectLogo.jpg";
 import { Link } from 'react-router-dom'
-import {NavbarLinks} from "../../../../data/navbar-links" 
+import { NavbarLinks } from "../../../../data/navbar-links";
 import { useLocation ,matchPath} from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import {AiOutlineShoppingCart} from 'react-icons/ai'
-import ProfileDropDown from '../../Auth/ProfileDropDown'
-import { apiConnector } from '../../../../services/apiconnector'
-import { categories } from '../../../../services/apis'
+import ProfileDropDown from "../../Auth/ProfileDropDown";
+import { apiConnector } from "../../../../services/apiconnector";
+import { categories } from "../../../../services/apis";
+
 import {IoIosArrowDropdownCircle} from 'react-icons/io'
 
 function Navbar() {
@@ -42,104 +43,113 @@ function Navbar() {
 
 
   return (
-    <div className='flex h-14 items-center justify-center border-b-[1px] border-b-black mt-5'>
-      <div className='flex w-11/12 max-w-maxContent items-center justify-center'>
-        <Link to="/">
-        <img src={curaConnectLogo} width={80} height={30} loading = 'lazy' className='rounded-lg'/>
-        </Link>
+    <div className="sticky top-0 z-50 w-full bg-richblack-900/90 backdrop-blur-md border-b border-richblack-700">
+  <div className="mx-auto flex h-16 w-11/12 max-w-maxContent items-center justify-between">
 
-        {/* navLinks */}
-        <nav>
-            <ul className='flex gap-x-6 text-white'>
-                {
-                    NavbarLinks.map( (link , index ) =>( 
-                         <li key = {index}>
-                            {
-                                link.title === "Catalog" ? (
-                                <div className='flex items-center gap-2'>
-                                    <p>{link.title}</p>
-                                    <IoIosArrowDropdownCircle/>
+    {/* Logo */}
+    <Link to="/" className="flex items-center gap-2">
+      <img
+        src={curaConnectLogo}
+        alt="CuraConnect"
+        width={90}
+        loading="lazy"
+        className="rounded-lg hover:scale-105 transition-transform duration-200"
+      />
+    </Link>
 
-                                    <div>
-                                        
-                                    </div>
+    {/* Nav Links */}
+    <nav>
+      <ul className="flex items-center gap-x-14 text-xl font-bold text-richblack-25">
+        {NavbarLinks.map((link, index) => (
+          <li key={index} className="relative">
+            {link.title === "Catalog" ? (
+              <div className="group flex cursor-pointer items-center gap-1">
+                <span className="group-hover:text-blue-400 transition-colors">
+                  {link.title}
+                </span>
+                <IoIosArrowDropdownCircle className="text-lg group-hover:rotate-180 transition-transform duration-200" />
 
-                                </div>) : (
-                                   <Link to={link?.path}>
-                                    <p className={`${matchRoute(link?.path) ?"text-blue-700" : "text-white"}`}>
-                                        {link.title}
-                                    </p>
-                                   </Link> 
-                                )
-                            }
-                        </li>
+                {/* Dropdown */}
+                <div className="invisible absolute left-1/2 top-[120%] w-[280px] -translate-x-1/2 rounded-xl bg-white p-4 text-richblack-800 opacity-0 shadow-xl
+                                transition-all duration-200 group-hover:visible group-hover:opacity-100">
+
+                  {subLinks?.length ? (
+                    subLinks.map((sub, i) => (
+                      <Link
+                        key={i}
+                        to={`/catalog/${sub.name}`}
+                        className="block rounded-lg px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-600 transition"
+                      >
+                        {sub.name}
+                      </Link>
                     ))
-                }
-            </ul>
-        </nav>
+                  ) : (
+                    <p className="text-sm text-richblack-400">Loading...</p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <Link to={link.path}>
+                <p
+                  className={`transition-colors hover:text-blue-400 ${
+                    matchRoute(link.path)
+                      ? "text-blue-500"
+                      : "text-richblack-25"
+                  }`}
+                >
+                  {link.title}
+                </p>
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
 
-        {/* Login/signup */}
-        <div className='flex gap-x-4 items-center'>
+    {/* Auth / Cart */}
+    <div className="flex items-center gap-x-5">
 
-                {
-                  user && user?.accountType != 'Doctor' &&(
-                    <Link to="/dashboars/cart" className='relative'>
-                      <AiOutlineShoppingCart/>
-                      {
-                        totalItems>0 &&(
-                          <span>
-                          {totalItems}
-                          </span>
-                        )
-                      }
-                    </Link>
-                  )
-                }
+      {/* Cart */}
+      {user && user?.accountType !== "Doctor" && (
+        <Link to="/dashboard/cart" className="relative">
+          <AiOutlineShoppingCart className="text-2xl text-richblack-25 hover:text-blue-400 transition" />
+          {totalItems > 0 && (
+            <span className="absolute -top-2 -right-2 grid h-5 w-5 place-items-center rounded-full bg-pink-500 text-xs font-bold text-white">
+              {totalItems}
+            </span>
+          )}
+        </Link>
+      )}
 
-                {
-                  token === null &&(
-                    <Link to = "/login">
-                      <button className="
-                                        px-5 py-2
-                                        text-white font-semibold
-                                        rounded-lg
-                                        border-2 border-transparent
-                                        bg-origin-border
-                                        bg-clip-padding
-                                        bg-gradient-to-r from-cyan-400 to-blue-500
-                                        hover:from-blue-500 hover:to-cyan-400
-                                        transition-all duration-300
-                                      ">
-                                  Login
-                      </button>
+      {/* Login / Signup */}
+      {token === null && (
+        <>
+          <Link to="/login">
+            <button className="rounded-lg px-5 py-2 text-sm font-semibold text-white
+                               bg-gradient-to-r from-cyan-400 to-blue-500
+                               hover:from-blue-500 hover:to-cyan-400
+                               transition-all duration-300">
+              Login
+            </button>
+          </Link>
 
-                    </Link>
-                  ) 
-                }
-                {
-                  token === null && (
-                    <Link to = '/signup'>
-                      <button className='px-5 py-2
-                                        text-white font-semibold
-                                        rounded-lg
-                                        border-2 border-transparent
-                                        bg-origin-border
-                                        bg-clip-padding
-                                        bg-gradient-to-r from-cyan-400 to-blue-500
-                                        hover:from-blue-500 hover:to-cyan-400
-                                        transition-all duration-300'>
-                        Sign up
-                      </button>
-                    </Link>
-                  )
-                }
+          <Link to="/signup">
+            <button className="rounded-lg px-5 py-2 text-sm font-semibold text-white
+                               bg-gradient-to-r from-blue-500 to-purple-500
+                               hover:from-purple-500 hover:to-blue-500
+                               transition-all duration-300">
+              Sign Up
+            </button>
+          </Link>
+        </>
+      )}
 
-                {
-                  token != null && <ProfileDropDown/>
-                }
-        </div>
-      </div>
+      {/* Profile */}
+      {token !== null && <ProfileDropDown />}
     </div>
+  </div>
+</div>
+
   )
 }
 

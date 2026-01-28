@@ -1,14 +1,32 @@
 import './App.css'
-import { Route,Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import DotGrid from './components/DotGrid'
-import Navbar from './components/core/HomePage/common/Navbar'
+import { Route, Routes } from 'react-router-dom'
 
+import Home from '../src/pages/Home'
+import Login from '../src/pages/Login'
+import Signup from '../src/pages/Signup'
+
+
+import Navbar from './components/core/HomePage/common/Navbar'
+import DotGrid from './components/DotGrid'
+
+import OpenRoute from './components/core/Auth/OpenRoute'
+import PrivateRoute from './components/core/Auth/PrivateRoute'
 
 function App() {
   return (
     <div className="w-screen min-h-screen flex flex-col font-inter relative bg-richblack-900">
-      <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+
+      {/* Background */}
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 0,
+        }}
+      >
         <DotGrid
           dotSize={7}
           gap={15}
@@ -21,10 +39,33 @@ function App() {
           returnDuration={1.5}
         />
       </div>
+
+      {/* App Content */}
       <div className="relative z-10">
-        <Navbar/>
+        <Navbar />
+
         <Routes>
-          <Route path ="/" element={<Home/>}/>
+          {/* Public */}
+          <Route path="/" element={<Home />} />
+
+          {/* Auth */}
+          <Route
+            path="/login"
+            element={
+              <OpenRoute>
+                <Login />
+              </OpenRoute>
+            }
+          />
+
+          <Route
+            path="/signup"
+            element={
+              <OpenRoute>
+                <Signup />
+              </OpenRoute>
+            }
+          />
         </Routes>
       </div>
     </div>
