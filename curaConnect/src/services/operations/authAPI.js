@@ -10,11 +10,11 @@ console.log("ENV:", import.meta.env);
 console.log("BASE:", import.meta.env.VITE_BASE_URL);
 
 const {
-  SENDOTP_API,
+  SEND_OTP_API,
   SIGNUP_API,
   LOGIN_API,
-  RESETPASSTOKEN_API,
-  RESETPASSWORD_API,
+  RESET_PASSWORD_TOKEN_API,
+  RESET_PASSWORD_API,
 } = endpoints
 
 /* ===================== SEND OTP ===================== */
@@ -151,13 +151,16 @@ export function logout(navigate) {
   }
 }
 
-/* ===================== RESET PASSWORD TOKEN ===================== */
+// RESET PASSWORD TOKEN
 export function getPasswordResetToken(email, setEmailSent) {
   return async (dispatch) => {
     dispatch(setLoading(true))
-
     try {
-      const response = await apiConnector("POST", RESETPASSTOKEN_API, { email })
+      const response = await apiConnector(
+        "POST",
+        RESET_PASSWORD_TOKEN_API,
+        { email }
+      )
 
       if (!response?.data?.success) {
         throw new Error(response?.data?.message)
@@ -166,7 +169,6 @@ export function getPasswordResetToken(email, setEmailSent) {
       toast.success("Password reset email sent")
       setEmailSent(true)
     } catch (error) {
-      console.error("RESET TOKEN ERROR:", error)
       toast.error(error?.response?.data?.message || "Unable to send reset email")
     } finally {
       dispatch(setLoading(false))
@@ -174,28 +176,28 @@ export function getPasswordResetToken(email, setEmailSent) {
   }
 }
 
-/* ===================== RESET PASSWORD ===================== */
+
+// RESET PASSWORD
 export function resetPassword(password, confirmPassword, token) {
   return async (dispatch) => {
     dispatch(setLoading(true))
-
     try {
-      const response = await apiConnector("POST", RESETPASSWORD_API, {
-        password,
-        confirmPassword,
-        token,
-      })
+      const response = await apiConnector(
+        "POST",
+        RESET_PASSWORD_API,
+        { password, confirmPassword, token }
+      )
 
       if (!response?.data?.success) {
         throw new Error(response?.data?.message)
       }
 
-      toast.success("Password reset successfully")
+      toast.success("Password reset successful")
     } catch (error) {
-      console.error("RESET PASSWORD ERROR:", error)
-      toast.error(error?.response?.data?.message || "Unable to reset password")
+      toast.error(error?.response?.data?.message || "Reset failed")
     } finally {
       dispatch(setLoading(false))
     }
   }
 }
+

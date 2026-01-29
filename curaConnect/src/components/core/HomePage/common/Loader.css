@@ -1,0 +1,37 @@
+.loader {
+    --ANIMATION-DELAY-MULTIPLIER: 70ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+  }
+  
+  .loader span {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: transparent;
+    background: linear-gradient(90deg, #22d3ee, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+  
+    transform: translateY(4rem);
+    animation: hideAndSeek 1s alternate infinite cubic-bezier(0.86, 0, 0.07, 1);
+  }
+  
+  .loader .l { animation-delay: calc(var(--ANIMATION-DELAY-MULTIPLIER) * 0); }
+  .loader .o { animation-delay: calc(var(--ANIMATION-DELAY-MULTIPLIER) * 1); }
+  .loader .a { animation-delay: calc(var(--ANIMATION-DELAY-MULTIPLIER) * 2); }
+  .loader .d { animation-delay: calc(var(--ANIMATION-DELAY-MULTIPLIER) * 3); }
+  .loader .ispan { animation-delay: calc(var(--ANIMATION-DELAY-MULTIPLIER) * 4); }
+  .loader .n { animation-delay: calc(var(--ANIMATION-DELAY-MULTIPLIER) * 5); }
+  .loader .g { animation-delay: calc(var(--ANIMATION-DELAY-MULTIPLIER) * 6); }
+  
+  @keyframes hideAndSeek {
+    from {
+      transform: translateY(4rem);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  

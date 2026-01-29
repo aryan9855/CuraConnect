@@ -128,7 +128,7 @@ function SignupForm() {
             name="email"
             value={email}
             onChange={handleOnChange}
-            placeholder="you@clinic.com"
+            placeholder="you@gmail.com"
             className="w-full rounded-lg bg-richblack-800 px-3 py-2 text-richblack-5
                        focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -146,7 +146,7 @@ function SignupForm() {
               name="password"
               value={password}
               onChange={handleOnChange}
-              placeholder="Create a secure password"
+              placeholder="Create password"
               className="w-full rounded-lg bg-richblack-800 px-3 py-2 pr-10 text-richblack-5
                          focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

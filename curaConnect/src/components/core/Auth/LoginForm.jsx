@@ -46,7 +46,7 @@ function LoginForm() {
             name="email"
             value={email}
             onChange={handleOnChange}
-            placeholder="you@hospital.com"
+            placeholder="you@gmail.com"
             className="w-full rounded-xl bg-richblack-800/80 px-4 py-2.5
                        text-richblack-5 placeholder-richblack-400
                        ring-1 ring-richblack-700
@@ -67,7 +67,7 @@ function LoginForm() {
             name="password"
             value={password}
             onChange={handleOnChange}
-            placeholder="Enter your secure password"
+            placeholder="Enter your password"
             className="w-full rounded-xl bg-richblack-800/80 px-4 py-2.5 pr-12
                        text-richblack-5 placeholder-richblack-400
                        ring-1 ring-richblack-700

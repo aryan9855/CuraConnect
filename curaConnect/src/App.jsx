@@ -12,6 +12,10 @@ import DotGrid from './components/DotGrid'
 import OpenRoute from './components/core/Auth/OpenRoute'
 import PrivateRoute from './components/core/Auth/PrivateRoute'
 
+import Error from './pages/Error'
+import ForgotPassword from './pages/ForgotPassword'
+import UpdatePassword from './pages/UpdatePassword'
+
 function App() {
   return (
     <div className="w-screen min-h-screen flex flex-col font-inter relative bg-richblack-900">
@@ -58,6 +62,28 @@ function App() {
             }
           />
 
+
+
+
+          <Route
+            path="/forgot-password"
+            element={
+              <OpenRoute>
+                <ForgotPassword />
+              </OpenRoute>
+            }
+          />
+
+          <Route
+            path="/update-password/:id"
+            element={
+              <OpenRoute>
+                <UpdatePassword />
+              </OpenRoute>
+            }
+          />
+
+
           <Route
             path="/signup"
             element={
@@ -66,6 +92,10 @@ function App() {
               </OpenRoute>
             }
           />
+
+
+<Route path="*" element={<Error />} />
+
         </Routes>
       </div>
     </div>
