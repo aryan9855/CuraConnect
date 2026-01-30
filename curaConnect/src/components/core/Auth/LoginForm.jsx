@@ -65,9 +65,11 @@ function LoginForm() {
             required
             type={showPassword ? "text" : "password"}
             name="password"
+            autoComplete="new-password"
             value={password}
             onChange={handleOnChange}
             placeholder="Enter your password"
+            
             className="w-full rounded-xl bg-richblack-800/80 px-4 py-2.5 pr-12
                        text-richblack-5 placeholder-richblack-400
                        ring-1 ring-richblack-700

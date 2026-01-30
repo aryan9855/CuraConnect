@@ -24,7 +24,7 @@ export function sendOtp(email, navigate) {
     dispatch(setLoading(true))
 
     try {
-      const response = await apiConnector("POST", SENDOTP_API, {
+      const response = await apiConnector("POST", SEND_OTP_API, {
         email,
         checkUserPresent: true,
       })
@@ -44,6 +44,7 @@ export function sendOtp(email, navigate) {
     }
   }
 }
+
 
 /* ===================== SIGNUP ===================== */
 export function signUp(

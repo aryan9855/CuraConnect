@@ -5,7 +5,7 @@ const initialState = {
     ? JSON.parse(localStorage.getItem("token"))
     : null,
   loading: false,
-  signupData: null, // 🔑 needed for OTP flow
+  signupData: null,
 };
 
 const authSlice = createSlice({
@@ -19,7 +19,10 @@ const authSlice = createSlice({
       state.loading = action.payload;
     },
     setSignupData(state, action) {
-      state.signupData = action.payload;
+      state.signupData = {
+        ...state.signupData,   // 🔥 PRESERVE EXISTING DATA
+        ...action.payload,     // 🔥 ADD / UPDATE NEW DATA
+      };
     },
   },
 });

@@ -15,6 +15,7 @@ import PrivateRoute from './components/core/Auth/PrivateRoute'
 import Error from './pages/Error'
 import ForgotPassword from './pages/ForgotPassword'
 import UpdatePassword from './pages/UpdatePassword'
+import VerifyEmail from './pages/VerifyEmail'
 
 function App() {
   return (
@@ -89,6 +90,15 @@ function App() {
             element={
               <OpenRoute>
                 <Signup />
+              </OpenRoute>
+            }
+          />
+
+            <Route
+            path="/verify-email"
+            element={
+              <OpenRoute>
+                <VerifyEmail />
               </OpenRoute>
             }
           />
