@@ -113,6 +113,13 @@ function App() {
             }
           />
 
+            <Route
+            path="dashboard/my-profile" 
+            element={
+              <MyProfile/>
+            }
+          />
+
 
 <Route path="*" element={<Error />} />
 
