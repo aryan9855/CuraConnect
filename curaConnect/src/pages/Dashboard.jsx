@@ -1,28 +1,26 @@
 import React from 'react'
-import Loader from '../components/core/HomePage/common/Loader'
 import { Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import Loader from '../components/core/HomePage/common/Loader'
+import Sidebar from '../components/core/Dashboard/Sidebar'
 
 function Dashboard() {
+  const { loading: authLoading } = useSelector((state) => state.auth)
+  const { loading: profileLoading } = useSelector((state) => state.profile)
 
-    const {loading: authLoading} = useSelector( (state)=> state.auth)
-    const {loading: profileLoading} = useSelector( (state)=> state.pofile)
-
-    if(profileLoading || authLoading){
-        return(
-            <Loader/>
-        )
-    }
-
-
+  if (authLoading || profileLoading) {
+    return <Loader />
+  }
 
   return (
-    <div className='relative flex min-h-[calc(100vh-3.5rem)]'>
-        <Sidebar/>
-            <div className='h-[calc(100vh-3.5rem)] overflow-auto'>
-                <div className='mx-auto w-11/12 max-w-[1000px] py-10'>
-                    <Outlet/>
-                </div>
-            </div>
+    <div className="flex min-h-[calc(100vh-3.5rem)]">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main Content */}
+      <main className="flex-1 px-8 py-6">
+        <Outlet />
+      </main>
     </div>
   )
 }

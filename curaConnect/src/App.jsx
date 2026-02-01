@@ -1,10 +1,9 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 
-import Home from '../src/pages/Home'
-import Login from '../src/pages/Login'
-import Signup from '../src/pages/Signup'
-
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
 
 import Navbar from './components/core/HomePage/common/Navbar'
 import DotGrid from './components/DotGrid'
@@ -18,21 +17,14 @@ import UpdatePassword from './pages/UpdatePassword'
 import VerifyEmail from './pages/VerifyEmail'
 import About from './pages/About'
 
+import MyProfile from './components/core/Dashboard/MyProfile'
+import Dashboard from './pages/Dashboard'
+
 function App() {
   return (
     <div className="w-screen min-h-screen flex flex-col font-inter relative bg-richblack-900">
-
       {/* Background */}
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 0,
-        }}
-      >
+      <div className="absolute inset-0 z-0">
         <DotGrid
           dotSize={7}
           gap={15}
@@ -64,8 +56,14 @@ function App() {
             }
           />
 
-
-
+          <Route
+            path="/signup"
+            element={
+              <OpenRoute>
+                <Signup />
+              </OpenRoute>
+            }
+          />
 
           <Route
             path="/forgot-password"
@@ -85,17 +83,7 @@ function App() {
             }
           />
 
-
           <Route
-            path="/signup"
-            element={
-              <OpenRoute>
-                <Signup />
-              </OpenRoute>
-            }
-          />
-
-            <Route
             path="/verify-email"
             element={
               <OpenRoute>
@@ -104,25 +92,30 @@ function App() {
             }
           />
 
-            <Route
+          <Route
             path="/about"
             element={
               <OpenRoute>
-                <About/>
+                <About />
               </OpenRoute>
             }
           />
 
-            <Route
-            path="dashboard/my-profile" 
+          {/* ✅ DASHBOARD (PROTECTED + LAYOUT) */}
+          <Route
+            path="/dashboard"
             element={
-              <MyProfile/>
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
             }
-          />
+          >
+            <Route path="my-profile" element={<MyProfile />} />
+            {/* <Route path="settings" element={<Setting />} /> */}
+          </Route>
 
-
-<Route path="*" element={<Error />} />
-
+          {/* Fallback */}
+          <Route path="*" element={<Error />} />
         </Routes>
       </div>
     </div>
