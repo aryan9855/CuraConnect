@@ -14,13 +14,12 @@ function SidebarLink({ link, iconName }) {
         px-3 py-2 text-sm font-medium transition-all
         ${
           isActive
-            ? 'bg-gradient-to-r from-cyan-400/20 to-blue-500/20 text-blue-300'
-            : 'text-richblack-300 hover:bg-richblack-800 hover:text-blue-200'
+            ? 'bg-white/5 text-cyan-300 shadow-inner'
+            : 'text-richblack-300 hover:bg-white/5 hover:text-cyan-200'
         }
         `
       }
     >
-      {/* Active indicator */}
       <span
         className={`
           absolute left-0 top-0 h-full w-[3px] rounded-r

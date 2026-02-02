@@ -32,6 +32,16 @@ export const profileEndpoints = {
   DELETE_PROFILE_API: `${BASE_URL}/profile/deleteProfile`,
 };
 
+/* ===================== SETTINGS ENDPOINTS ===================== */
+/* ✅ REQUIRED FOR SettingsAPI.js */
+export const settingsEndpoints = {
+  UPDATE_PROFILE_API: profileEndpoints.UPDATE_PROFILE_API,
+  UPDATE_DISPLAY_PICTURE_API:
+    profileEndpoints.UPDATE_DISPLAY_PICTURE_API,
+  DELETE_PROFILE_API: profileEndpoints.DELETE_PROFILE_API,
+  CHANGE_PASSWORD_API: authEndpoints.CHANGE_PASSWORD_API,
+};
+
 /* ===================== PATIENT / PAYMENT ENDPOINTS ===================== */
 export const patientEndpoints = {
   HEALTHPROGRAM_PAYMENT_API: `${BASE_URL}/payment/capturePayment`,

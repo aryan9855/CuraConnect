@@ -19,6 +19,8 @@ import About from './pages/About'
 
 import MyProfile from './components/core/Dashboard/MyProfile'
 import Dashboard from './pages/Dashboard'
+import Settings from '../src/components/core/Dashboard/Settings/Settings'
+
 
 function App() {
   return (
@@ -111,7 +113,7 @@ function App() {
             }
           >
             <Route path="my-profile" element={<MyProfile />} />
-            {/* <Route path="settings" element={<Setting />} /> */}
+            <Route path="settings" element={<Settings />} />
           </Route>
 
           {/* Fallback */}
