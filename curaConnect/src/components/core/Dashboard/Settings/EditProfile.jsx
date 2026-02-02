@@ -56,10 +56,15 @@ export default function EditProfile() {
           <input
             type="date"
             className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2
-                       text-richblack-5 focus:ring-2 focus:ring-cyan-400/40"
+             text-richblack-5 focus:ring-2 focus:ring-cyan-400/40"
             {...register("dateOfBirth")}
-            defaultValue={user?.additionalDetails?.dateOfBirth}
+            defaultValue={
+              user?.additionalDetails?.dateOfBirth
+                ? user.additionalDetails.dateOfBirth.split("T")[0]
+                : ""
+            }
           />
+
 
           <select
             className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2

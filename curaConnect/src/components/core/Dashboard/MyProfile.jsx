@@ -23,7 +23,7 @@ function MyProfile() {
       <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 shadow-[0_10px_50px_rgba(0,0,0,0.6)]">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="flex items-center gap-5">
-            
+
             {/* ✅ FIXED AVATAR */}
             <div className="h-[90px] w-[90px] rounded-full overflow-hidden border-2 border-cyan-400/40 
                             ring-2 ring-cyan-400/20 shadow-[0_0_25px_rgba(34,211,238,0.25)]">
@@ -94,7 +94,15 @@ function MyProfile() {
           <Info label="Email" value={user?.email} />
           <Info label="Phone" value={user?.additionalDetails?.contactNumber} />
           <Info label="Gender" value={user?.additionalDetails?.gender} />
-          <Info label="Date of Birth" value={user?.additionalDetails?.dateOfBirth} />
+          <Info
+            label="Date of Birth"
+            value={
+              user?.additionalDetails?.dateOfBirth
+                ? new Date(user.additionalDetails.dateOfBirth).toLocaleDateString("en-IN")
+                : null
+            }
+          />
+
         </div>
       </div>
     </div>
