@@ -1,5 +1,6 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -19,12 +20,19 @@ import About from './pages/About'
 
 import MyProfile from './components/core/Dashboard/MyProfile'
 import Dashboard from './pages/Dashboard'
-import Settings from '../src/components/core/Dashboard/Settings/Settings'
+import Settings from './components/core/Dashboard/Settings/Settings'
+import EnrolledHealthPrograms from './components/core/Dashboard/EnrolledHealthPrograms'
+import Cart from './components/core/Dashboard/Cart/Cart'
 
+import { ACCOUNT_TYPE } from './utils/constants'
 
 function App() {
+  // ✅ GET USER FROM REDUX
+  const { user } = useSelector((state) => state.profile)
+
   return (
     <div className="w-screen min-h-screen flex flex-col font-inter relative bg-richblack-900">
+      
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <DotGrid
@@ -45,10 +53,9 @@ function App() {
         <Navbar />
 
         <Routes>
-          {/* Public */}
+          {/* ================= PUBLIC ================= */}
           <Route path="/" element={<Home />} />
 
-          {/* Auth */}
           <Route
             path="/login"
             element={
@@ -103,7 +110,7 @@ function App() {
             }
           />
 
-          {/* ✅ DASHBOARD (PROTECTED + LAYOUT) */}
+          {/* ================= DASHBOARD ================= */}
           <Route
             path="/dashboard"
             element={
@@ -114,9 +121,20 @@ function App() {
           >
             <Route path="my-profile" element={<MyProfile />} />
             <Route path="settings" element={<Settings />} />
+
+            {/* ✅ PATIENT ONLY ROUTES */}
+            {user?.accountType === ACCOUNT_TYPE.PATIENT && (
+              <>
+                <Route path="cart" element={<Cart />} />
+                <Route
+                  path="my-health-programs"
+                  element={<EnrolledHealthPrograms />}
+                />
+              </>
+            )}
           </Route>
 
-          {/* Fallback */}
+          {/* ================= FALLBACK ================= */}
           <Route path="*" element={<Error />} />
         </Routes>
       </div>

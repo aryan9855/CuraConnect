@@ -24,8 +24,7 @@ export const categories = categoryEndpoints;
 /* ===================== PROFILE ENDPOINTS ===================== */
 export const profileEndpoints = {
   GET_USER_DETAILS_API: `${BASE_URL}/profile/getUserDetails`,
-  GET_USER_ENROLLED_HEALTHPROGRAMS_API:
-    `${BASE_URL}/profile/getEnrolledHealthPrograms`,
+  GET_USER_ENROLLED_HEALTHPROGRAMS_API:`${BASE_URL}/profile/getEnrolledHealthPrograms`,
   GET_DOCTOR_DASHBOARD_API: `${BASE_URL}/profile/doctorDashboard`,
   UPDATE_PROFILE_API: `${BASE_URL}/profile/updateProfile`,
   UPDATE_DISPLAY_PICTURE_API: `${BASE_URL}/profile/updateDisplayPicture`,

@@ -53,7 +53,11 @@ const { convertSecondsToDuration } = require("../utils/secToDuration")
       await profile.save()
   
       const updatedUserDetails = await User.findById(userId)
-        .populate("additionalDetails")
+      .populate({
+        path: "additionalDetails",
+        model: "Profile",
+      })
+      
         .exec()
   
       return res.status(200).json({

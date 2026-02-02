@@ -1,93 +1,59 @@
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
-const User = require("../models/User")
-//auth 
-exports.auth = async(req, res,next)=>{
-    try {
-        //extract token
-        const token = req.cookies.token 
-                        || req.body.token
-                        || req.header("Authorisation").replace("Bearer" ,"")
 
-        //if token is missing
-        if(!token){
-            return res.status(401).json({
-                success:false,
-                message:'Token is missing'
-            })
-        }
-        //verify token
+exports.auth = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization
 
-        try {
-            const decode = jwt.verify(token , process.env.JWT_SECRET)
-            console.log(decode)
-            req.user = decode
-        } catch (error) {
-            return res.status(401).json({
-                success: false,
-                message: 'token is invalid'
-            })
-        }
-        next();
-
-    } catch (error) {
-        return res.status(401).json({
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
         success: false,
-        message:'Something went wrong while validating the token'
+        message: "Authorization token missing",
+      })
+    }
+
+    const token = authHeader.split(" ")[1]
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    req.user = decoded
+
+    next()
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
     })
-    }
-}   
-
-//isPatient
-exports.isPatient = async (req , res , next)=>{
-    try {
-        if(req.user.accountType !== 'Patient') {
-            return res.status(401).json({
-                success:false,
-                message:'This is a protected route for Patients only'
-            })
-            next() ; 
-        }       
-    } catch (error) {
-        return res.status(500).json({
-            success:false,
-            message: 'User role cannot be verified try again'
-        })
-    }
+  }
 }
 
-//isDoctor
-exports.isDoctor = async (req , res , next)=>{
-    try {
-        if(req.user.accountType !== 'Doctor') {
-            return res.status(401).json({
-                success:false,
-                message:'This is a protected route for Doctors only'
-            })
-        }   
-        next() ;     
-    } catch (error) {
-        return res.status(500).json({
-            success:false,
-            message: 'User role cannot be verified try again'
-        })
-    }
+// ================= ROLES =================
+
+exports.isPatient = (req, res, next) => {
+  if (req.user.accountType !== "Patient") {
+    return res.status(401).json({
+      success: false,
+      message: "Protected route for Patients only",
+    })
+  }
+  next()
 }
 
-//isAdmin
-exports.isAdmin = async (req , res , next)=>{
-    try {
-        if(req.user.accountType !== 'Admin') {
-            return res.status(401).json({
-                success:false,
-                message:'This is a protected route for Admins only'
-            })
-        }     
-        next() ; 
-    } catch (error) {
-        return res.status(500).json({
-            success:false,
-            message: 'User role cannot be verified try again'
-        })
-    }
+exports.isDoctor = (req, res, next) => {
+  if (req.user.accountType !== "Doctor") {
+    return res.status(401).json({
+      success: false,
+      message: "Protected route for Doctors only",
+    })
+  }
+  next()
+}
+
+exports.isAdmin = (req, res, next) => {
+  if (req.user.accountType !== "Admin") {
+    return res.status(401).json({
+      success: false,
+      message: "Protected route for Admins only",
+    })
+  }
+  next()
 }
