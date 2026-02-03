@@ -4,14 +4,14 @@ function IconBtn({
   text,
   onClick,
   children,
-  disable,
+  disabled,
   outline = false,
   customClasses = '',
   type = 'button',
 }) {
   return (
     <button
-      disabled={disable}
+      disabled={disabled}
       onClick={onClick}
       type={type}
       className={`

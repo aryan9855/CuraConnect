@@ -18,7 +18,7 @@ const healthProgramSlice = createSlice({
       state.healthProgram = action.payload
     },
     setEditHealthProgram: (state, action) => {
-      state.editCourse = action.payload
+      state.editHealthProgram = action.payload   // ✅ FIX
     },
     setPaymentLoading: (state, action) => {
       state.paymentLoading = action.payload

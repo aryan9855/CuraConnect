@@ -4,7 +4,7 @@ export const ACCOUNT_TYPE = {
 };
 
 
-  export const COURSE_STATUS = {
+  export const HEALTHPROGRAM_STATUS = {
     DRAFT: "Draft",
     PUBLISHED: "Published",
   }

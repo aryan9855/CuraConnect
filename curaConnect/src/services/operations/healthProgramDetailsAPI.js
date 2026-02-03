@@ -2,26 +2,34 @@ import { toast } from "react-hot-toast"
 
 import { updateCompletedLectures } from "../../slices/viewHealthProgramSlice"
 import { apiConnector } from "../apiconnector"
-import { healthProgramEndpoints } from "../apis"
+import { healthProgramEndpoints, categoryEndpoints } from "../apis"
+
+/* ===================== DESTRUCTURE ENDPOINTS ===================== */
 
 const {
-  HEALTHPROGRAM_DETAILS_API,
-  HEALTHPROGRAM_CATEGORIES_API,
-  GET_ALL_HEALTHPROGRAM_API,
+  GET_ALL_HEALTHPROGRAMS_API,
+  GET_HEALTHPROGRAM_DETAILS_API,
+  GET_FULL_HEALTHPROGRAM_DETAILS_AUTHENTICATED_API,
+
   CREATE_HEALTHPROGRAM_API,
   EDIT_HEALTHPROGRAM_API,
   DELETE_HEALTHPROGRAM_API,
+
   CREATE_SECTION_API,
-  CREATE_SUBSECTION_API,
   UPDATE_SECTION_API,
-  UPDATE_SUBSECTION_API,
   DELETE_SECTION_API,
+
+  CREATE_SUBSECTION_API,
+  UPDATE_SUBSECTION_API,
   DELETE_SUBSECTION_API,
-  GET_ALL_DOCTOR_HEALTHPROGRAM_API,
-  GET_FULL_HEALTHPROGRAM_DETAILS_AUTHENTICATED,
+
+  GET_ALL_DOCTOR_HEALTHPROGRAMS_API,
+  UPDATE_HEALTHPROGRAM_PROGRESS_API,
+
   CREATE_RATING_API,
-  LECTURE_COMPLETION_API,
 } = healthProgramEndpoints
+
+const { GET_ALL_CATEGORIES_API } = categoryEndpoints
 
 /* ============================================================
    🌍 GET ALL HEALTH PROGRAMS
@@ -31,7 +39,10 @@ export const getAllHealthPrograms = async () => {
   let result = []
 
   try {
-    const response = await apiConnector("GET", GET_ALL_HEALTHPROGRAM_API)
+    const response = await apiConnector(
+      "GET",
+      GET_ALL_HEALTHPROGRAMS_API
+    )
 
     if (!response?.data?.success) {
       throw new Error("Could not fetch health programs")
@@ -39,7 +50,7 @@ export const getAllHealthPrograms = async () => {
 
     result = response.data.data
   } catch (error) {
-    console.error("GET_ALL_HEALTHPROGRAM_API ERROR:", error)
+    console.error("GET_ALL_HEALTHPROGRAMS_API ERROR:", error)
     toast.error(error.message)
   }
 
@@ -57,17 +68,17 @@ export const fetchHealthProgramDetails = async (healthProgramId) => {
   try {
     const response = await apiConnector(
       "POST",
-      HEALTHPROGRAM_DETAILS_API,
+      GET_HEALTHPROGRAM_DETAILS_API,
       { healthProgramId }
     )
 
-    if (!response.data.success) {
+    if (!response?.data?.success) {
       throw new Error(response.data.message)
     }
 
-    result = response.data
+    result = response.data.data
   } catch (error) {
-    console.error("HEALTHPROGRAM_DETAILS_API ERROR:", error)
+    console.error("GET_HEALTHPROGRAM_DETAILS_API ERROR:", error)
     result = error?.response?.data
   }
 
@@ -76,22 +87,25 @@ export const fetchHealthProgramDetails = async (healthProgramId) => {
 }
 
 /* ============================================================
-   🏷 GET HEALTH PROGRAM CATEGORIES
+   🏷 GET HEALTH PROGRAM CATEGORIES (FIXED)
 ============================================================ */
 export const fetchHealthProgramCategories = async () => {
   let result = []
 
   try {
-    const response = await apiConnector("GET", HEALTHPROGRAM_CATEGORIES_API)
+    const response = await apiConnector(
+      "GET",
+      GET_ALL_CATEGORIES_API
+    )
 
-    if (!response?.data?.success) {
-      throw new Error("Could not fetch categories")
+    if (response?.data?.success) {
+      result = response.data.data
+    } else {
+      console.error("CATEGORY API FAILED:", response?.data)
     }
-
-    result = response.data.data
   } catch (error) {
-    console.error("HEALTHPROGRAM_CATEGORIES_API ERROR:", error)
-    toast.error(error.message)
+    console.error("CATEGORY API ERROR:", error)
+    toast.error("Could not fetch categories")
   }
 
   return result
@@ -119,7 +133,7 @@ export const addHealthProgramDetails = async (data, token) => {
       throw new Error("Could not create health program")
     }
 
-    toast.success("Health program created successfully")
+    toast.success("Health program created")
     result = response.data.data
   } catch (error) {
     console.error("CREATE_HEALTHPROGRAM_API ERROR:", error)
@@ -164,16 +178,19 @@ export const editHealthProgramDetails = async (data, token) => {
 }
 
 /* ============================================================
-   🧩 SECTIONS & SUBSECTIONS
+   🧩 SECTIONS
 ============================================================ */
 export const createSection = async (data, token) => {
   const toastId = toast.loading("Creating section...")
   let result = null
 
   try {
-    const response = await apiConnector("POST", CREATE_SECTION_API, data, {
-      Authorization: `Bearer ${token}`,
-    })
+    const response = await apiConnector(
+      "POST",
+      CREATE_SECTION_API,
+      data,
+      { Authorization: `Bearer ${token}` }
+    )
 
     if (!response?.data?.success) {
       throw new Error("Could not create section")
@@ -190,38 +207,17 @@ export const createSection = async (data, token) => {
   return result
 }
 
-export const createSubSection = async (data, token) => {
-  const toastId = toast.loading("Adding session...")
-  let result = null
-
-  try {
-    const response = await apiConnector("POST", CREATE_SUBSECTION_API, data, {
-      Authorization: `Bearer ${token}`,
-    })
-
-    if (!response?.data?.success) {
-      throw new Error("Could not add session")
-    }
-
-    toast.success("Session added")
-    result = response.data.data
-  } catch (error) {
-    console.error("CREATE_SUBSECTION_API ERROR:", error)
-    toast.error(error.message)
-  }
-
-  toast.dismiss(toastId)
-  return result
-}
-
 export const updateSection = async (data, token) => {
   const toastId = toast.loading("Updating section...")
   let result = null
 
   try {
-    const response = await apiConnector("POST", UPDATE_SECTION_API, data, {
-      Authorization: `Bearer ${token}`,
-    })
+    const response = await apiConnector(
+      "POST",
+      UPDATE_SECTION_API,
+      data,
+      { Authorization: `Bearer ${token}` }
+    )
 
     if (!response?.data?.success) {
       throw new Error("Could not update section")
@@ -238,41 +234,17 @@ export const updateSection = async (data, token) => {
   return result
 }
 
-export const updateSubSection = async (data, token) => {
-  const toastId = toast.loading("Updating session...")
-  let result = null
-
-  try {
-    const response = await apiConnector("POST", UPDATE_SUBSECTION_API, data, {
-      Authorization: `Bearer ${token}`,
-    })
-
-    if (!response?.data?.success) {
-      throw new Error("Could not update session")
-    }
-
-    toast.success("Session updated")
-    result = response.data.data
-  } catch (error) {
-    console.error("UPDATE_SUBSECTION_API ERROR:", error)
-    toast.error(error.message)
-  }
-
-  toast.dismiss(toastId)
-  return result
-}
-
-/* ============================================================
-   ❌ DELETE SECTION / SUBSECTION
-============================================================ */
 export const deleteSection = async (data, token) => {
   const toastId = toast.loading("Deleting section...")
   let result = null
 
   try {
-    const response = await apiConnector("POST", DELETE_SECTION_API, data, {
-      Authorization: `Bearer ${token}`,
-    })
+    const response = await apiConnector(
+      "POST",
+      DELETE_SECTION_API,
+      data,
+      { Authorization: `Bearer ${token}` }
+    )
 
     if (!response?.data?.success) {
       throw new Error("Could not delete section")
@@ -289,14 +261,74 @@ export const deleteSection = async (data, token) => {
   return result
 }
 
+/* ============================================================
+   🧩 SUBSECTIONS
+============================================================ */
+export const createSubSection = async (data, token) => {
+  const toastId = toast.loading("Adding session...")
+  let result = null
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      CREATE_SUBSECTION_API,
+      data,
+      { Authorization: `Bearer ${token}` }
+    )
+
+    if (!response?.data?.success) {
+      throw new Error("Could not add session")
+    }
+
+    toast.success("Session added")
+    result = response.data.data
+  } catch (error) {
+    console.error("CREATE_SUBSECTION_API ERROR:", error)
+    toast.error(error.message)
+  }
+
+  toast.dismiss(toastId)
+  return result
+}
+
+export const updateSubSection = async (data, token) => {
+  const toastId = toast.loading("Updating session...")
+  let result = null
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      UPDATE_SUBSECTION_API,
+      data,
+      { Authorization: `Bearer ${token}` }
+    )
+
+    if (!response?.data?.success) {
+      throw new Error("Could not update session")
+    }
+
+    toast.success("Session updated")
+    result = response.data.data
+  } catch (error) {
+    console.error("UPDATE_SUBSECTION_API ERROR:", error)
+    toast.error(error.message)
+  }
+
+  toast.dismiss(toastId)
+  return result
+}
+
 export const deleteSubSection = async (data, token) => {
   const toastId = toast.loading("Deleting session...")
   let result = null
 
   try {
-    const response = await apiConnector("POST", DELETE_SUBSECTION_API, data, {
-      Authorization: `Bearer ${token}`,
-    })
+    const response = await apiConnector(
+      "POST",
+      DELETE_SUBSECTION_API,
+      data,
+      { Authorization: `Bearer ${token}` }
+    )
 
     if (!response?.data?.success) {
       throw new Error("Could not delete session")
@@ -314,101 +346,7 @@ export const deleteSubSection = async (data, token) => {
 }
 
 /* ============================================================
-   🩺 DOCTOR HEALTH PROGRAMS
-============================================================ */
-export const fetchDoctorHealthPrograms = async (token) => {
-  const toastId = toast.loading("Loading...")
-  let result = []
-
-  try {
-    const response = await apiConnector(
-      "GET",
-      GET_ALL_DOCTOR_HEALTHPROGRAM_API,
-      null,
-      {
-        Authorization: `Bearer ${token}`,
-      }
-    )
-
-    if (!response?.data?.success) {
-      throw new Error("Could not fetch doctor programs")
-    }
-
-    result = response.data.data
-  } catch (error) {
-    console.error("GET_ALL_DOCTOR_HEALTHPROGRAM_API ERROR:", error)
-    toast.error(error.message)
-  }
-
-  toast.dismiss(toastId)
-  return result
-}
-
-/* ============================================================
-   📚 FULL HEALTH PROGRAM DETAILS
-============================================================ */
-export const getFullDetailsOfHealthProgram = async (healthProgramId, token) => {
-  const toastId = toast.loading("Loading...")
-  let result = null
-
-  try {
-    const response = await apiConnector(
-      "POST",
-      GET_FULL_HEALTHPROGRAM_DETAILS_AUTHENTICATED,
-      { healthProgramId },
-      {
-        Authorization: `Bearer ${token}`,
-      }
-    )
-
-    if (!response.data.success) {
-      throw new Error(response.data.message)
-    }
-
-    result = response.data.data
-  } catch (error) {
-    console.error("GET_FULL_HEALTHPROGRAM_DETAILS ERROR:", error)
-    result = error?.response?.data
-  }
-
-  toast.dismiss(toastId)
-  return result
-}
-
-/* ============================================================
-   ✅ MARK SESSION COMPLETE
-============================================================ */
-export const markLectureAsComplete = async (data, token) => {
-  const toastId = toast.loading("Updating progress...")
-  let result = false
-
-  try {
-    const response = await apiConnector(
-      "POST",
-      LECTURE_COMPLETION_API,
-      data,
-      {
-        Authorization: `Bearer ${token}`,
-      }
-    )
-
-    if (!response.data.message) {
-      throw new Error("Could not update progress")
-    }
-
-    toast.success("Session completed")
-    result = true
-  } catch (error) {
-    console.error("LECTURE_COMPLETION_API ERROR:", error)
-    toast.error(error.message)
-  }
-
-  toast.dismiss(toastId)
-  return result
-}
-
-/* ============================================================
-   ⭐ CREATE REVIEW
+   ⭐ CREATE RATING
 ============================================================ */
 export const createRating = async (data, token) => {
   const toastId = toast.loading("Submitting review...")
@@ -419,9 +357,7 @@ export const createRating = async (data, token) => {
       "POST",
       CREATE_RATING_API,
       data,
-      {
-        Authorization: `Bearer ${token}`,
-      }
+      { Authorization: `Bearer ${token}` }
     )
 
     if (!response?.data?.success) {
