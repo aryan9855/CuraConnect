@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const axiosInstance = axios.create({
-  withCredentials: true,
+  withCredentials: false,
 })
 
 export const apiConnector = (
@@ -9,7 +9,8 @@ export const apiConnector = (
   url,
   bodyData = undefined,
   headers = {},
-  params = {}
+  params = {},
+  withCredentials = false
 ) => {
   return axiosInstance({
     method,
@@ -17,5 +18,6 @@ export const apiConnector = (
     data: bodyData,
     headers,
     params,
+    withCredentials,
   })
 }

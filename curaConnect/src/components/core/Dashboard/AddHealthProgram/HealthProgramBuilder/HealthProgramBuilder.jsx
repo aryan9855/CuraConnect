@@ -7,9 +7,9 @@ import { BiRightArrow } from 'react-icons/bi'
 import { toast } from 'react-hot-toast'
 
 // IMPORT ACTIONS & APIs
-import { setStep, setEditHealthProgram, setHealthProgram } from '../../../../slices/healthProgramSlice'
-import { createSection, updateSection } from '../../../../services/operations/healthProgramAPI'
-import NestedView from './NestedView'
+import { setStep, setEditHealthProgram, setHealthProgram } from '../../../../../slices/healthProgramSlice'
+import { createSection, updateSection } from "../../../../../services/operations/healthProgramDetailsAPI";
+//import NestedView from './NestedView'
 
 function HealthProgramBuilder() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm()
@@ -118,9 +118,9 @@ function HealthProgramBuilder() {
         </div>
       </form>
 
-      {healthProgram.healthProgramContent.length > 0 && (
+      {/* {healthProgram.healthProgramContent.length > 0 && (
         <NestedView />
-      )}
+      )} */}
 
       <div className="flex justify-center gap-x-3 mt-10">
         <button
