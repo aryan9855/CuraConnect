@@ -4,6 +4,7 @@ import { FaCheck } from "react-icons/fa"
 
 import HealthProgramInformationForm from "./HealthProgramInformation/HealthProgramInformationForm"
 import HealthProgramBuilder from "./HealthProgramBuilder/HealthProgramBuilderForm"
+import PublishHealthProgram from "./PublishHealthProgram/PublishHealthProgram"
 
 export default function RenderSteps() {
   const { step } = useSelector((state) => state.healthProgram)
@@ -65,6 +66,7 @@ export default function RenderSteps() {
       {step === 1 && <HealthProgramInformationForm />}
       {/* step 2 & 3 later */}
       {step==2 && <HealthProgramBuilder/>}
+      {step==3 && <PublishHealthProgram/>}
     </>
   )
 }

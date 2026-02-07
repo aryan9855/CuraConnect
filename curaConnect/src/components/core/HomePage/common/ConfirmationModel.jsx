@@ -1,7 +1,7 @@
 import React from 'react'
 import IconBtn from './IconBtn'
 
-function ConfirmationModel({ modalData }) {
+function ConfirmationModel({ modelData }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-richblack-900/70 backdrop-blur-sm">
       <div
@@ -16,24 +16,24 @@ function ConfirmationModel({ modalData }) {
         "
       >
         <p className="text-xl font-semibold text-blue-400">
-          {modalData?.text1}
+          {modelData?.text1}
         </p>
 
         <p className="mt-2 text-sm text-richblack-300">
-          {modalData?.text2}
+          {modelData?.text2}
         </p>
 
         <div className="mt-6 flex justify-end gap-4">
           <IconBtn
-            onClick={modalData?.btn1Handler}
-            text={modalData?.btn1Text}
+            onClick={modelData?.btn1Handler}
+            text={modelData?.btn1Text}
           />
 
           <button
-            onClick={modalData?.btn2Handler}
+            onClick={modelData?.btn2Handler}
             className="rounded-md px-4 py-2 text-sm font-medium text-richblack-200 hover:text-white hover:bg-richblack-700 transition-all"
           >
-            {modalData?.btn2Text}
+            {modelData?.btn2Text}
           </button>
         </div>
       </div>

@@ -36,9 +36,6 @@ app.use(
   })
 );
 
-// IMPORTANT: DO NOT add app.options("*", cors()) ❌
-// Modern Express + Node 22 crashes on "*"
-
 // File upload middleware
 app.use(
   fileUpload({

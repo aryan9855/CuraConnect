@@ -51,7 +51,11 @@ export default function HealthProgramInformationForm() {
       setValue("consultationFee", healthProgram.price)
       setValue("programTags", healthProgram.tag)
       setValue("healthBenefits", healthProgram.whatYouWillLearn)
-      setValue("medicalCategory", healthProgram.category)
+      setValue(
+        "medicalCategory",
+        healthProgram.category?._id || healthProgram.category
+      )
+      
       setValue("eligibilityCriteria", healthProgram.instructions)
       setValue("programImage", healthProgram.thumbnail)
     }
@@ -69,10 +73,18 @@ export default function HealthProgramInformationForm() {
       formData.append("price", data.consultationFee)
       formData.append("tag", JSON.stringify(data.programTags))
       formData.append("whatYouWillLearn", data.healthBenefits)
-      formData.append("category", data.medicalCategory)
+      formData.append(
+        "category",
+        typeof data.medicalCategory === "object"
+          ? data.medicalCategory._id
+          : data.medicalCategory
+      )
+      
       formData.append("instructions", JSON.stringify(data.eligibilityCriteria))
-      if (data.programImage)
+      if (data.programImage && typeof data.programImage !== "string") {
         formData.append("thumbnailImage", data.programImage)
+      }
+      
 
       setLoading(true)
       const result = await editHealthProgramDetails(formData, token)

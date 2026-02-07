@@ -154,30 +154,30 @@ function NestedView({ handleChangeEditSectionName }) {
 
       {addSubSection && (
         <SubSectionModal
-          modalData={addSubSection}
-          setModalData={setAddSubSection}
+          modelData={addSubSection}
+          setmodelData={setAddSubSection}
           add
         />
       )}
 
       {viewSubSection && (
         <SubSectionModal
-          modalData={viewSubSection}
-          setModalData={setViewSubSection}
+          modelData={viewSubSection}
+          setmodelData={setViewSubSection}
           view
         />
       )}
 
       {editSubSection && (
         <SubSectionModal
-          modalData={editSubSection}
-          setModalData={setEditSubSection}
+          modelData={editSubSection}
+          setmodelData={setEditSubSection}
           edit
         />
       )}
 
       {confirmationModal && (
-        <ConfirmationModel modalData={confirmationModal} />
+        <ConfirmationModel modelData={confirmationModal} />
       )}
     </>
   )

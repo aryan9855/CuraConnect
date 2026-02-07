@@ -79,8 +79,9 @@ export const healthProgramEndpoints = {
   DELETE_SUBSECTION_API:
     `${BASE_URL}/healthProgram/deleteSubSection`,
 
-  GET_ALL_DOCTOR_HEALTHPROGRAMS_API:
-    `${BASE_URL}/healthProgram/getInstructorHealthPrograms`,
+    GET_ALL_DOCTOR_HEALTHPROGRAMS_API:
+    BASE_URL + "/healthProgram/getDoctorHealthPrograms",
+  
 
   UPDATE_HEALTHPROGRAM_PROGRESS_API:
     `${BASE_URL}/healthProgram/updateHealthProgramProgress`,

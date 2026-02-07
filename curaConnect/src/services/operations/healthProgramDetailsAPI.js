@@ -57,6 +57,40 @@ export const getAllHealthPrograms = async () => {
   toast.dismiss(toastId)
   return result
 }
+/* ============================================================
+   👨‍⚕️ GET ALL DOCTOR HEALTH PROGRAMS
+============================================================ */
+export const fetchDoctorHealthPrograms = async (token) => {
+  let result = []
+  const toastId = toast.loading("Loading...")
+
+  try {
+    const response = await apiConnector(
+      "GET",
+      GET_ALL_DOCTOR_HEALTHPROGRAMS_API,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+
+    console.log("DOCTOR HEALTH PROGRAMS RESPONSE:", response)
+
+    if (!response?.data?.success) {
+      throw new Error("Could Not Fetch Doctor Health Programs")
+    }
+
+    result = response?.data?.data
+
+  } catch (error) {
+    console.log("DOCTOR HEALTH PROGRAMS ERROR:", error)
+    toast.error(error.message)
+  }
+
+  toast.dismiss(toastId)
+  return result
+}
+
 
 /* ============================================================
    📄 GET HEALTH PROGRAM DETAILS
@@ -177,6 +211,24 @@ export const editHealthProgramDetails = async (data, token) => {
   return result
 }
 
+// delete a HealthProgram
+export const deleteHealthProgram = async (data, token) => {
+  const toastId = toast.loading("Loading...")
+  try {
+    const response = await apiConnector("DELETE", DELETE_HEALTHPROGRAM_API, data, {
+      Authorization: `Bearer ${token}`,
+    })
+    console.log("DELETE HEALTH PROGRAM API RESPONSE............", response)
+    if (!response?.data?.success) {
+      throw new Error("Could Not Delete Health Program")
+    }
+    toast.success("Health Program Deleted")
+  } catch (error) {
+    console.log("DELETE HEALTH PROGRAM API ERROR............", error)
+    toast.error(error.message)
+  }
+  toast.dismiss(toastId)
+}
 /* ============================================================
    🧩 SECTIONS
 ============================================================ */

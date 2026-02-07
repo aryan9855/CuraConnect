@@ -17,7 +17,7 @@ function Sidebar() {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [confirmationModel, setConfirmationModal] = useState(null)
+  const [confirmationModel, setConfirmationModel] = useState(null)
 
   if (profileLoading || authLoading) return <Loader />
 
@@ -58,13 +58,13 @@ function Sidebar() {
         {/* Logout */}
         <button
           onClick={() =>
-            setConfirmationModal({
+            setConfirmationModel({
               text1: "Are you sure?",
               text2: "You will be logged out of your account.",
               btn1Text: "Logout",
               btn2Text: "Cancel",
               btn1Handler: () => dispatch(logout(navigate)),
-              btn2Handler: () => setConfirmationModal(null),
+              btn2Handler: () => setConfirmationModel(null),
             })
           }
           className="

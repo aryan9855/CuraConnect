@@ -28,6 +28,8 @@ import Cart from "./components/core/Dashboard/Cart/Cart"
 import { ACCOUNT_TYPE } from "./utils/constants"
 import { getUserDetails } from "./services/operations/SettingsAPI"
 import AddHealthProgram from "./components/core/Dashboard/AddHealthProgram"
+import MyHealthPrograms from "./components/core/Dashboard/MyHealthPrograms"
+import EditHealthProgram from "./components/core/Dashboard/EditHealthProgram/EditHealthProgram"
 
 
 function App() {
@@ -150,6 +152,12 @@ function App() {
             {user?.accountType === ACCOUNT_TYPE.DOCTOR && (
               <>
                 <Route path="add-health-programs" element={<AddHealthProgram />} />
+                <Route path="my-health-programs" element={<MyHealthPrograms/>} />
+                <Route
+  path="edit-healthProgram/:healthProgramId"
+  element={<EditHealthProgram />}
+/>
+
               </>
             )}
           </Route>
