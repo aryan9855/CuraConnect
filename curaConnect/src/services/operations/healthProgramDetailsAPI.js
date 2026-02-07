@@ -197,7 +197,10 @@ export const createSection = async (data, token) => {
     }
 
     toast.success("Section created")
-    result = response.data.updatedHealthProgram
+
+    // 🔥 IMPORTANT FIX
+    result = response.data.data
+
   } catch (error) {
     console.error("CREATE_SECTION_API ERROR:", error)
     toast.error(error.message)
@@ -206,6 +209,7 @@ export const createSection = async (data, token) => {
   toast.dismiss(toastId)
   return result
 }
+
 
 export const updateSection = async (data, token) => {
   const toastId = toast.loading("Updating section...")
@@ -224,7 +228,9 @@ export const updateSection = async (data, token) => {
     }
 
     toast.success("Section updated")
+
     result = response.data.data
+
   } catch (error) {
     console.error("UPDATE_SECTION_API ERROR:", error)
     toast.error(error.message)
@@ -233,6 +239,7 @@ export const updateSection = async (data, token) => {
   toast.dismiss(toastId)
   return result
 }
+
 
 export const deleteSection = async (data, token) => {
   const toastId = toast.loading("Deleting section...")
@@ -251,7 +258,9 @@ export const deleteSection = async (data, token) => {
     }
 
     toast.success("Section deleted")
+
     result = response.data.data
+
   } catch (error) {
     console.error("DELETE_SECTION_API ERROR:", error)
     toast.error(error.message)
@@ -260,6 +269,7 @@ export const deleteSection = async (data, token) => {
   toast.dismiss(toastId)
   return result
 }
+
 
 /* ============================================================
    🧩 SUBSECTIONS

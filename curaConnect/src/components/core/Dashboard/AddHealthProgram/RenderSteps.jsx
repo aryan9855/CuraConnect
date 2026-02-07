@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { FaCheck } from "react-icons/fa"
 
 import HealthProgramInformationForm from "./HealthProgramInformation/HealthProgramInformationForm"
-import HealthProgramBuilder from "./HealthProgramBuilder/HealthProgramBuilder"
+import HealthProgramBuilder from "./HealthProgramBuilder/HealthProgramBuilderForm"
 
 export default function RenderSteps() {
   const { step } = useSelector((state) => state.healthProgram)

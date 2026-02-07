@@ -1,12 +1,9 @@
 import React from 'react'
 import IconBtn from './IconBtn'
 
-function ConfirmationModel({ modelData }) {
+function ConfirmationModel({ modalData }) {
   return (
-    // Overlay
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-richblack-900/70 backdrop-blur-sm">
-      
-      {/* Modal */}
       <div
         className="
           w-11/12 max-w-md
@@ -16,37 +13,27 @@ function ConfirmationModel({ modelData }) {
           border border-richblack-700
           shadow-[0_0_40px_rgba(34,211,238,0.25)]
           p-6
-          animate-fadeIn
         "
       >
-        {/* Title */}
         <p className="text-xl font-semibold text-blue-400">
-          {modelData?.text1}
+          {modalData?.text1}
         </p>
 
-        {/* Description */}
         <p className="mt-2 text-sm text-richblack-300">
-          {modelData?.text2}
+          {modalData?.text2}
         </p>
 
-        {/* Actions */}
         <div className="mt-6 flex justify-end gap-4">
           <IconBtn
-            onClick={modelData?.btn1Handler}
-            text={modelData?.btn1Text}
+            onClick={modalData?.btn1Handler}
+            text={modalData?.btn1Text}
           />
 
           <button
-            onClick={modelData?.btn2Handler}
-            className="
-              rounded-md px-4 py-2 text-sm font-medium
-              text-richblack-200
-              hover:text-white
-              hover:bg-richblack-700
-              transition-all
-            "
+            onClick={modalData?.btn2Handler}
+            className="rounded-md px-4 py-2 text-sm font-medium text-richblack-200 hover:text-white hover:bg-richblack-700 transition-all"
           >
-            {modelData?.btn2Text}
+            {modalData?.btn2Text}
           </button>
         </div>
       </div>
