@@ -30,6 +30,7 @@ import { getUserDetails } from "./services/operations/SettingsAPI"
 import AddHealthProgram from "./components/core/Dashboard/AddHealthProgram"
 import MyHealthPrograms from "./components/core/Dashboard/MyHealthPrograms"
 import EditHealthProgram from "./components/core/Dashboard/EditHealthProgram/EditHealthProgram"
+import Catalog from "./pages/Catalog"
 
 
 function App() {
@@ -71,6 +72,8 @@ function App() {
         <Routes>
           {/* ================= PUBLIC ROUTES ================= */}
           <Route path="/" element={<Home />} />
+          <Route path="/catalog/:catalogName" element={<Catalog />} />
+
 
           <Route
             path="/login"

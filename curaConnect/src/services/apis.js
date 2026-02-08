@@ -101,6 +101,7 @@ export const catalogEndpoints = {
     `${BASE_URL}/healthProgram/getCategoryPageDetails`,
 };
 
+
 /* ===================== CONTACT US ===================== */
 export const contactUsEndpoints = {
   CONTACT_US_API: `${BASE_URL}/reach/contact`,
