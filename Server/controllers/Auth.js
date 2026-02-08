@@ -174,7 +174,7 @@ exports.login = async (req , res) =>{
         const user = await User.findOne({email}).populate("additionalDetails")
         if(!user){
             return res.status(401).json({
-                sucess:false,
+                success:false,
                 message:'User cannot be registered. Please sigup first'
             })
         }

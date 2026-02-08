@@ -10,109 +10,120 @@ const { convertSecondsToDuration } = require("../utils/secToDuration")
 //              CREATE HEALTH PROGRAM
 exports.createHealthProgram = async (req, res) => {
   try {
-    const userId = req.user.id
+    console.log("REQ USER:", req.user);
+
+    if (!req.user?.id) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: Login required",
+      });
+    }
+
+    const userId = req.user.id;
 
     const {
       healthProgramName,
       healthProgramDescription,
       whatYouWillLearn,
       price,
-      tag: _tag,
+      tag,
       category,
-      status: _status,
-      instructions: _instructions,
-    } = req.body
+      status = "Draft",
+      instructions,
+    } = req.body;
+
+    // Validate Required Fields
+    if (
+      !healthProgramName?.trim() ||
+      !healthProgramDescription?.trim() ||
+      !whatYouWillLearn?.trim() ||
+      !price ||
+      !category
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "All required fields must be filled",
+      });
+    }
 
     if (!req.files?.thumbnailImage) {
       return res.status(400).json({
         success: false,
         message: "Thumbnail image is required",
-      })
+      });
     }
 
-    let tag = []
-    let instructions = []
+    let parsedTag = [];
+    let parsedInstructions = [];
 
     try {
-      tag = JSON.parse(_tag)
-      if (_instructions) instructions = JSON.parse(_instructions)
-    } catch {
+      if (tag) parsedTag = JSON.parse(tag);
+      if (instructions) parsedInstructions = JSON.parse(instructions);
+    } catch (err) {
       return res.status(400).json({
         success: false,
         message: "Invalid JSON format for tag or instructions",
-      })
+      });
     }
 
-    if (
-      !healthProgramName ||
-      !healthProgramDescription ||
-      !whatYouWillLearn ||
-      !price ||
-      !tag ||
-      !category
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      })
-    }
-
-    const status = _status || "Draft"
-
-    const doctor = await User.findById(userId)
+    const doctor = await User.findById(userId);
     if (!doctor) {
       return res.status(404).json({
         success: false,
         message: "Doctor not found",
-      })
+      });
     }
 
-    const categoryDetails = await Category.findById(category)
+    const categoryDetails = await Category.findById(category);
     if (!categoryDetails) {
       return res.status(404).json({
         success: false,
         message: "Category not found",
-      })
+      });
     }
 
     const thumbnailUpload = await uploadImageToCloudinary(
       req.files.thumbnailImage,
       process.env.FOLDER_NAME
-    )
+    );
 
     const healthProgram = await HealthProgram.create({
       healthProgramName,
       healthProgramDescription,
       doctor: doctor._id,
       whatYouWillLearn,
-      price,
-      tag,
+      price: Number(price),
+      tag: parsedTag,
       category: categoryDetails._id,
       thumbnail: thumbnailUpload.secure_url,
       status,
-      instructions,
-    })
+      instructions: parsedInstructions,
+    });
 
-    await User.findByIdAndUpdate(doctor._id, {
+    await User.findByIdAndUpdate(userId, {
       $push: { healthProgram: healthProgram._id },
-    })
+    });
 
     await Category.findByIdAndUpdate(category, {
       $push: { healthPrograms: healthProgram._id },
-    })
+    });
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Health Program created successfully",
       data: healthProgram,
-    })
+    });
+
   } catch (error) {
+    console.error("CREATE HEALTH PROGRAM ERROR:", error);
+
     return res.status(500).json({
       success: false,
-      message: error.message,
-    })
+      message: "Internal Server Error",
+    });
   }
-}
+};
+
 
 //              EDIT HEALTH PROGRAM
 exports.editHealthProgram = async (req, res) => {

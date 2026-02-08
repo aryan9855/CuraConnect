@@ -4,7 +4,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max)
 }
 
-// Create Category (Admin)
+// ================= CREATE CATEGORY =================
 const createCategory = async (req, res) => {
   try {
     const { name, description } = req.body
@@ -34,7 +34,7 @@ const createCategory = async (req, res) => {
   }
 }
 
-// Get All Categories 
+// ================= SHOW ALL CATEGORIES =================
 const showAllCategories = async (req, res) => {
   try {
     const allCategories = await Category.find(
@@ -54,7 +54,7 @@ const showAllCategories = async (req, res) => {
   }
 }
 
-// Category Page Details (CuraConnect)
+// ================= CATEGORY PAGE DETAILS =================
 const categoryPageDetails = async (req, res) => {
   try {
     const { categoryId } = req.body
@@ -66,7 +66,7 @@ const categoryPageDetails = async (req, res) => {
       })
     }
 
-    // Selected category
+    // 🔹 Selected Category
     const selectedCategory = await Category.findById(categoryId)
       .populate({
         path: "healthPrograms",
@@ -84,15 +84,26 @@ const categoryPageDetails = async (req, res) => {
       })
     }
 
-    // Other categories
+    // 🔥 Added missing check (from old code logic)
+    if (!selectedCategory.healthPrograms || selectedCategory.healthPrograms.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No health programs found for this category",
+      })
+    }
+
+    // 🔹 Other Categories
     const categoriesExceptSelected = await Category.find({
       _id: { $ne: categoryId },
     })
 
     let differentCategory = null
+
     if (categoriesExceptSelected.length > 0) {
       differentCategory = await Category.findById(
-        categoriesExceptSelected[getRandomInt(categoriesExceptSelected.length)]._id
+        categoriesExceptSelected[
+          getRandomInt(categoriesExceptSelected.length)
+        ]._id
       )
         .populate({
           path: "healthPrograms",
@@ -101,7 +112,7 @@ const categoryPageDetails = async (req, res) => {
         .exec()
     }
 
-    // Most enrolled health programs
+    // 🔹 Most Enrolled Health Programs
     const allCategories = await Category.find().populate({
       path: "healthPrograms",
       match: { status: "Published" },
@@ -136,7 +147,6 @@ const categoryPageDetails = async (req, res) => {
   }
 }
 
-// EXPORTS (IMPORTANT)
 module.exports = {
   createCategory,
   showAllCategories,
