@@ -17,7 +17,7 @@ const {
   isAdmin,
 } = require("../middlewares/auth")
 
-//                                  Payments routes
+//Payments routes
 // Capture payment for Health Program (Patient)
 router.post("/capturePayment", auth, isPatient, capturePayment)
 

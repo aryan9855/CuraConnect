@@ -18,7 +18,7 @@ function HealthProgram_Card({ healthProgram, Height = "h-[220px]" }) {
   if (!healthProgram) return null
 
   return (
-    <Link to={`/healthProgram/${healthProgram._id}`}>
+    <Link to={`/healthPrograms/${healthProgram._id}`}>
       <div className="bg-richblack-800/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-richblack-700">
 
         <img

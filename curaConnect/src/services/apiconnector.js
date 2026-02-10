@@ -1,10 +1,5 @@
 import axios from "axios"
 
-export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  withCredentials: true, // IMPORTANT
-})
-
 export const apiConnector = async (
   method,
   url,
@@ -13,17 +8,18 @@ export const apiConnector = async (
   params = null
 ) => {
   try {
-    const response = await axiosInstance({
+    const response = await axios({
       method,
       url,
       data: bodyData,
       headers,
       params,
+      withCredentials: true,
     })
 
     return response
   } catch (error) {
     console.error("API ERROR:", error?.response?.data || error.message)
-    return error?.response
+    throw error
   }
 }
