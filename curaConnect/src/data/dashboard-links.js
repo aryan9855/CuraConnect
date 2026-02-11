@@ -30,7 +30,7 @@ export const sidebarLinks = [
   {
     id: 5,
     name: "Enrolled Health Program",
-    path: "/dashboard/enrolled-health-programs",
+    path: "/dashboard/my-health-programs",
     type: ACCOUNT_TYPE.PATIENT,
     icon: "VscMortarBoard",
   },

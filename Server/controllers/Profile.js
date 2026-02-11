@@ -204,82 +204,94 @@ exports.updateDisplayPicture = async (req, res) => {
 }
 
 // Get enrolled health programs
+// Get enrolled health programs
 exports.getEnrolledHealthPrograms = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.id;
 
+    // 1️⃣ Get user with populated health programs (NO deep populate)
     let userDetails = await User.findById(userId)
-      .populate({
-        path: "healthProgram",
-        populate: {
-          path: "healthProgramContent",
-          populate: {
-            path: "subSection",
-          },
-        },
-      })
-      .exec()
+      .populate("healthProgram")
+      .exec();
 
     if (!userDetails) {
       return res.status(404).json({
         success: false,
         message: "User not found",
-      })
+      });
     }
 
-    userDetails = userDetails.toObject()
+    userDetails = userDetails.toObject();
 
-    if (!userDetails.healthProgram || !Array.isArray(userDetails.healthProgram)) {
+    if (!userDetails.healthProgram || userDetails.healthProgram.length === 0) {
       return res.status(200).json({
         success: true,
         data: [],
-      })
+      });
     }
 
+    // 2️⃣ Calculate progress + duration safely
     for (let i = 0; i < userDetails.healthProgram.length; i++) {
-      let totalDurationInSeconds = 0
-      let subSectionLength = 0
+      const program = userDetails.healthProgram[i];
 
-      const programContent = userDetails.healthProgram[i].healthProgramContent || []
-      
-      for (let j = 0; j < programContent.length; j++) {
-        const subSection = programContent[j].subSection || []
-        
-        totalDurationInSeconds += subSection.reduce(
-          (acc, curr) => acc + parseInt(curr.timeDuration || 0),
+      let totalDurationInSeconds = 0;
+      let totalSubSections = 0;
+
+      // Fetch sections separately (safer than nested populate)
+      const fullProgram = await HealthProgram.findById(program._id)
+        .populate({
+          path: "healthProgramContent",
+          populate: {
+            path: "subSection",
+          },
+        })
+        .exec();
+
+      const content = fullProgram?.healthProgramContent || [];
+
+      for (let section of content) {
+        const subSections = section.subSection || [];
+
+        totalDurationInSeconds += subSections.reduce(
+          (acc, curr) => acc + Number(curr.timeDuration || 0),
           0
-        )
+        );
 
-        subSectionLength += subSection.length
+        totalSubSections += subSections.length;
       }
 
-      userDetails.healthProgram[i].totalDuration =
-        convertSecondsToDuration(totalDurationInSeconds)
+      // Add total duration
+      program.totalDuration =
+        convertSecondsToDuration(totalDurationInSeconds);
 
-      let progress = await HealthProgramProgress.findOne({
-        healthProgramID: userDetails.healthProgram[i]._id,
+      // 3️⃣ Get progress
+      const progress = await HealthProgramProgress.findOne({
+        healthProgramID: program._id,
         userId,
-      })
+      });
 
-      const completed = progress?.completedVideos?.length || 0
+      const completed = progress?.completedVideos?.length || 0;
 
-      userDetails.healthProgram[i].progressPercentage =
-        subSectionLength === 0
+      program.progressPercentage =
+        totalSubSections === 0
           ? 100
-          : Math.round((completed / subSectionLength) * 100 * 100) / 100
+          : Math.round((completed / totalSubSections) * 100);
     }
 
     return res.status(200).json({
       success: true,
       data: userDetails.healthProgram,
-    })
+    });
+
   } catch (error) {
+    console.error("GET ENROLLED HEALTH PROGRAMS ERROR:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
-    })
+    });
   }
-}
+};
+
 
 // Doctor dashboard
 exports.doctorDashboard = async (req, res) => {

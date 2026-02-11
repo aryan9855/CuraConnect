@@ -22,13 +22,12 @@ import About from "./pages/About";
 import MyProfile from "./components/core/Dashboard/MyProfile";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./components/core/Dashboard/Settings/Settings";
-import EnrolledHealthPrograms from "./components/core/Dashboard/EnrolledHealthPrograms";
 import Cart from "./components/core/Dashboard/Cart/Cart";
 
 import { ACCOUNT_TYPE } from "./utils/constants";
 import { getUserDetails } from "./services/operations/SettingsAPI";
 import AddHealthProgram from "./components/core/Dashboard/AddHealthProgram";
-import MyHealthPrograms from "./components/core/Dashboard/MyHealthPrograms";
+import EnrolledHealthPrograms from "./components/core/Dashboard/EnrolledHealthPrograms";
 import EditHealthProgram from "./components/core/Dashboard/EditHealthProgram/EditHealthProgram";
 import Catalog from "./pages/Catalog";
 import HealthProgramDetails from "./pages/HealthProgramDetails";
@@ -159,7 +158,7 @@ function App() {
                 />
                 <Route
                   path="my-health-programs"
-                  element={<MyHealthPrograms />}
+                  element={<EnrolledHealthPrograms />}
                 />
                 <Route
                   path="edit-healthProgram/:healthProgramId"

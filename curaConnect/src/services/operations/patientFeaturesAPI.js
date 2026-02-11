@@ -2,7 +2,8 @@ import { toast } from "react-hot-toast";
 import { patientEndpoints } from "../apis";
 import { apiConnector } from "../apiconnector";
 import { setPaymentLoading, resetCart } from "../../slices/cartSlice";
-import CuraConnectLogo from "../../assets/Images/CuraConnectLogo.jpg";
+import logo from "../../assets/Images/CuraConnectLogo.jpg";
+
 
 const {
   HEALTHPROGRAM_PAYMENT_API,
@@ -66,7 +67,7 @@ export async function buyHealthProgram(
       order_id: orderResponse.data.data.id,
       name: "CuraConnect",
       description: "Thank You for Purchasing the Health Program",
-      image: CuraConnectLogo,
+      image: logo,
 
       // ✅ Correct field name
       prefill: {
@@ -146,7 +147,8 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
       "Payment Successful! You are enrolled in the Health Program"
     );
 
-    navigate("/dashboard/enrolled-healthPrograms");
+    navigate("/dashboard/my-health-programs");
+
     dispatch(resetCart());
 
   } catch (error) {
