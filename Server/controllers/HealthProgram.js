@@ -205,7 +205,7 @@ exports.getHealthProgramDetails = async (req, res) => {
       .populate({
         path: "healthProgramContent",
         populate: {
-          path: "SubSection",
+          path: "subSection",
           select: "title timeDuration description videoUrl",
         },
       })
@@ -219,7 +219,7 @@ exports.getHealthProgramDetails = async (req, res) => {
 
     let totalSeconds = 0
     healthProgram.healthProgramContent.forEach((section) => {
-      section.SubSection.forEach((sub) => {
+      section.subSection.forEach((sub) => {
         totalSeconds += Number(sub.timeDuration) || 0
       })
     })
@@ -307,7 +307,7 @@ exports.deleteHealthProgram = async (req, res) => {
 
     for (const sectionId of program.healthProgramContent) {
       const section = await Section.findById(sectionId)
-      for (const subId of section.SubSection) {
+      for (const subId of section.subSection) {
         await SubSection.findByIdAndDelete(subId)
       }
       await Section.findByIdAndDelete(sectionId)
