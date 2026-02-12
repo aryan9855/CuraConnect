@@ -1,9 +1,8 @@
 import { toast } from "react-hot-toast";
-import { patientEndpoints } from "../apis";
+import { patientEndpoints, healthProgramEndpoints } from "../apis";
 import { apiConnector } from "../apiconnector";
 import { setPaymentLoading, resetCart } from "../../slices/cartSlice";
 import logo from "../../assets/Images/CuraConnectLogo.jpg";
-
 
 const {
   HEALTHPROGRAM_PAYMENT_API,
@@ -11,8 +10,9 @@ const {
   SEND_PAYMENT_SUCCESS_EMAIL_API,
 } = patientEndpoints;
 
+const { UNENROLL_API } = healthProgramEndpoints;
 
-// Load Razorpay Script
+// ================= LOAD RAZORPAY SCRIPT =================
 function loadScript(src) {
   return new Promise((resolve) => {
     const script = document.createElement("script");
@@ -25,7 +25,7 @@ function loadScript(src) {
   });
 }
 
-
+// ================= BUY HEALTH PROGRAM =================
 export async function buyHealthProgram(
   token,
   healthPrograms,
@@ -36,7 +36,6 @@ export async function buyHealthProgram(
   const toastId = toast.loading("Loading...");
 
   try {
-    // Load Razorpay SDK
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
@@ -46,7 +45,6 @@ export async function buyHealthProgram(
       return;
     }
 
-    // Create Order
     const orderResponse = await apiConnector(
       "POST",
       HEALTHPROGRAM_PAYMENT_API,
@@ -61,7 +59,7 @@ export async function buyHealthProgram(
     }
 
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY,   // ✅ Vite env
+      key: import.meta.env.VITE_RAZORPAY_KEY,
       currency: orderResponse.data.data.currency,
       amount: orderResponse.data.data.amount,
       order_id: orderResponse.data.data.id,
@@ -69,7 +67,6 @@ export async function buyHealthProgram(
       description: "Thank You for Purchasing the Health Program",
       image: logo,
 
-      // ✅ Correct field name
       prefill: {
         name: `${userDetails.firstName} ${userDetails.lastName}`,
         email: userDetails.email,
@@ -93,7 +90,6 @@ export async function buyHealthProgram(
 
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
-
   } catch (error) {
     console.log("Payment API error:", error);
     toast.error("Could not make Payment");
@@ -102,8 +98,7 @@ export async function buyHealthProgram(
   toast.dismiss(toastId);
 }
 
-
-// Send Success Email
+// ================= SEND SUCCESS EMAIL =================
 async function sendPaymentSuccessEmail(response, amount, token) {
   try {
     await apiConnector(
@@ -123,8 +118,7 @@ async function sendPaymentSuccessEmail(response, amount, token) {
   }
 }
 
-
-// Verify Payment
+// ================= VERIFY PAYMENT =================
 async function verifyPayment(bodyData, token, navigate, dispatch) {
   const toastId = toast.loading("Verifying Payment...");
   dispatch(setPaymentLoading(true));
@@ -148,9 +142,7 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
     );
 
     navigate("/dashboard/my-health-programs");
-
     dispatch(resetCart());
-
   } catch (error) {
     console.log("Payment verify error:", error);
     toast.error("Could not verify payment");
@@ -159,3 +151,35 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
   toast.dismiss(toastId);
   dispatch(setPaymentLoading(false));
 }
+
+// ================= LEAVE HEALTH PROGRAM =================
+export const leaveHealthProgram = async (
+  token,
+  healthProgramId
+) => {
+  const toastId = toast.loading("Leaving health program...");
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      UNENROLL_API,
+      { healthProgramId },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error("Could not leave health program");
+    }
+
+    toast.success("Left health program successfully");
+    return true;
+  } catch (error) {
+    console.log("Unenroll error:", error);
+    toast.error("Error leaving health program");
+    return false;
+  } finally {
+    toast.dismiss(toastId);
+  }
+};

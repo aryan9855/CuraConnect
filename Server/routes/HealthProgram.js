@@ -12,6 +12,7 @@ const {
   editHealthProgram,
   getDoctorHealthPrograms,
   deleteHealthProgram,
+  unenrollFromHealthProgram,   // ✅ ADDED THIS
 } = require("../controllers/HealthProgram");
 
 // HealthProgram Progress
@@ -47,7 +48,7 @@ const {
   deleteSubSection,
 } = require("../controllers/SubSection");
 
-//                HEALTH PROGRAM ROUTES
+// ================== HEALTH PROGRAM ROUTES ==================
 
 router.post("/createHealthProgram", auth, isDoctor, createHealthProgram);
 router.get("/getAllHealthPrograms", getAllHealthPrograms);
@@ -56,6 +57,7 @@ router.post("/getFullHealthProgramDetails", auth, getFullHealthProgramDetails);
 router.post("/editHealthProgram", auth, isDoctor, editHealthProgram);
 router.get("/getDoctorHealthPrograms", auth, isDoctor, getDoctorHealthPrograms);
 router.delete("/deleteHealthProgram", auth, isDoctor, deleteHealthProgram);
+
 router.post(
   "/updateHealthProgramProgress",
   auth,
@@ -63,7 +65,7 @@ router.post(
   updateHealthProgramProgress
 );
 
-//                CATEGORY ROUTES (INSIDE HEALTHPROGRAM)
+// ================== CATEGORY ROUTES ==================
 
 // Admin creates category
 router.post("/createCategory", auth, isAdmin, createCategory);
@@ -74,16 +76,25 @@ router.get("/showAllCategories", showAllCategories);
 // Category page details
 router.post("/getCategoryPageDetails", categoryPageDetails);
 
+// ================== SECTION ROUTES ==================
+
 router.post("/addSection", auth, isDoctor, addSection);
 router.post("/updateSection", auth, isDoctor, updateSection);
 router.post("/deleteSection", auth, isDoctor, deleteSection);
 
+// ================== SUB SECTION ROUTES ==================
 
-//                SUB SECTION ROUTES
 router.post("/addSubSection", auth, isDoctor, addSubSection);
 router.post("/updateSubSection", auth, isDoctor, updateSubSection);
 router.post("/deleteSubSection", auth, isDoctor, deleteSubSection);
 
+// ================== UNENROLL ROUTE ==================
 
+router.post(
+  "/unenroll",
+  auth,
+  isPatient,
+  unenrollFromHealthProgram   // ✅ NOW PROPERLY IMPORTED
+);
 
 module.exports = router;

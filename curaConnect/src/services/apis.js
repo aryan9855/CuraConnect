@@ -88,6 +88,9 @@ export const healthProgramEndpoints = {
 
   CREATE_RATING_API:
     `${BASE_URL}/healthProgram/createRating`,
+
+    UNENROLL_API: `${BASE_URL}/healthProgram/unenroll`,
+
 };
 
 /* ===================== RATINGS & REVIEWS ===================== */
