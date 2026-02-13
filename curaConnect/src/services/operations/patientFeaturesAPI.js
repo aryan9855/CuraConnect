@@ -92,8 +92,15 @@ export async function buyHealthProgram(
     paymentObject.open();
   } catch (error) {
     console.log("Payment API error:", error);
-    toast.error("Could not make Payment");
+  
+    const message =
+      error?.response?.data?.message ||
+      error.message ||
+      "Payment failed";
+  
+    toast.error(message);
   }
+  
 
   toast.dismiss(toastId);
 }

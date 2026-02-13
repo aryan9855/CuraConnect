@@ -254,14 +254,36 @@ exports.deleteHealthProgram = async (req, res) => {
       });
     }
 
+    // 1️⃣ Delete subsections and sections
     for (const sectionId of program.healthProgramContent) {
       const section = await Section.findById(sectionId);
-      for (const subId of section.subSection) {
-        await SubSection.findByIdAndDelete(subId);
+
+      if (section) {
+        for (const subId of section.subSection) {
+          await SubSection.findByIdAndDelete(subId);
+        }
       }
+
       await Section.findByIdAndDelete(sectionId);
     }
 
+    // 2️⃣ Remove program from all enrolled users
+    await User.updateMany(
+      { healthProgram: healthProgramId },
+      { $pull: { healthProgram: healthProgramId } }
+    );
+
+    // 3️⃣ Delete all progress related to program
+    await HealthProgramProgress.deleteMany({
+      healthProgramID: healthProgramId,
+    });
+
+    // 4️⃣ Remove from category
+    await Category.findByIdAndUpdate(program.category, {
+      $pull: { healthPrograms: healthProgramId },
+    });
+
+    // 5️⃣ Finally delete program
     await HealthProgram.findByIdAndDelete(healthProgramId);
 
     return res.status(200).json({
@@ -270,12 +292,14 @@ exports.deleteHealthProgram = async (req, res) => {
     });
 
   } catch (error) {
+    console.error("DELETE ERROR:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
+
 
 // ================= EDIT HEALTH PROGRAM =================
 exports.editHealthProgram = async (req, res) => {
@@ -335,7 +359,8 @@ exports.unenrollFromHealthProgram = async (req, res) => {
     // Remove user from HealthProgram
     await HealthProgram.findByIdAndUpdate(
       healthProgramId,
-      { $pull: { patientsEnrolled: userId } }
+      { $pull: { patientEnrolled: userId } }
+
     );
 
     // 🔥 MATCHES YOUR USER MODEL FIELD (singular)
