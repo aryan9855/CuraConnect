@@ -34,6 +34,7 @@ import HealthProgramDetails from "./pages/HealthProgramDetails";
 import ViewHealthProgram from "./pages/ViewHealthProgram";
 import VideoDetails from "./components/core/ViewHealthProgram/VideoDetails";
 import AutoRedirectToFirstLecture from "./components/core/ViewHealthProgram/AutoRedirectToFirstLecture";
+import Doctor from "./components/core/Dashboard/DoctorDashboard/Doctor";
 
 
 
@@ -158,6 +159,7 @@ function App() {
 
             {user?.accountType === ACCOUNT_TYPE.DOCTOR && (
               <>
+              <Route path="doctor" element={<Doctor/>} />
                 <Route
                   path="add-health-programs"
                   element={<AddHealthProgram />}

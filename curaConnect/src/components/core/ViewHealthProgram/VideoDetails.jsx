@@ -59,6 +59,95 @@ const VideoDetails = () => {
     }
   };
 
+  // Get current section index
+const sectionIndex = healthProgramSectionData.findIndex(
+  (section) => section._id.toString() === sectionId
+);
+
+// Get current subsection index
+const subSectionIndex =
+  sectionIndex >= 0
+    ? healthProgramSectionData[sectionIndex].subSection.findIndex(
+        (sub) => sub._id.toString() === subSectionId
+      )
+    : -1;
+
+// Check if first video
+const isFirstVideo = () => {
+  return sectionIndex === 0 && subSectionIndex === 0;
+};
+
+// Check if last video
+const isLastVideo = () => {
+  if (sectionIndex === -1 || subSectionIndex === -1) return true;
+
+  const lastSectionIndex = healthProgramSectionData.length - 1;
+  const lastSubSectionIndex =
+    healthProgramSectionData[lastSectionIndex].subSection.length - 1;
+
+  return (
+    sectionIndex === lastSectionIndex &&
+    subSectionIndex === lastSubSectionIndex
+  );
+};
+
+// Go to previous video
+const goToPrevVideo = () => {
+  if (sectionIndex === -1 || subSectionIndex === -1) return;
+
+  if (subSectionIndex > 0) {
+    const prevSub =
+      healthProgramSectionData[sectionIndex].subSection[
+        subSectionIndex - 1
+      ];
+
+    navigate(
+      `/view-healthProgram/${healthProgramId}/section/${sectionId}/sub-section/${prevSub._id}`
+    );
+  } else if (sectionIndex > 0) {
+    const prevSection =
+      healthProgramSectionData[sectionIndex - 1];
+
+    const lastSub =
+      prevSection.subSection[
+        prevSection.subSection.length - 1
+      ];
+
+    navigate(
+      `/view-healthProgram/${healthProgramId}/section/${prevSection._id}/sub-section/${lastSub._id}`
+    );
+  }
+};
+
+// Go to next video
+const goToNextVideo = () => {
+  if (sectionIndex === -1 || subSectionIndex === -1) return;
+
+  const currentSection =
+    healthProgramSectionData[sectionIndex];
+
+  if (subSectionIndex < currentSection.subSection.length - 1) {
+    const nextSub =
+      currentSection.subSection[subSectionIndex + 1];
+
+    navigate(
+      `/view-healthProgram/${healthProgramId}/section/${sectionId}/sub-section/${nextSub._id}`
+    );
+  } else if (
+    sectionIndex < healthProgramSectionData.length - 1
+  ) {
+    const nextSection =
+      healthProgramSectionData[sectionIndex + 1];
+
+    const firstSub = nextSection.subSection[0];
+
+    navigate(
+      `/view-healthProgram/${healthProgramId}/section/${nextSection._id}/sub-section/${firstSub._id}`
+    );
+  }
+};
+
+
   if (!videoData) return null;
 
     return (
