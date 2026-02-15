@@ -151,6 +151,14 @@ exports.getHealthProgramDetails = async (req, res) => {
           path: "subSection",
           select: "title timeDuration description videoUrl",
         },
+      })
+      // ⭐ ADD THIS
+      .populate({
+        path: "ratingAndReviews",
+        populate: {
+          path: "user",
+          select: "firstName lastName image",
+        },
       });
 
     if (!healthProgram) {
@@ -182,6 +190,7 @@ exports.getHealthProgramDetails = async (req, res) => {
     });
   }
 };
+
 
 
 // ================= GET FULL HEALTH PROGRAM =================

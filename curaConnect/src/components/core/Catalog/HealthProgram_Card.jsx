@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import RatingStars from "../../core/HomePage/common/RatingStars"
-import GetAvgRating from "../../../utils/avgRating"
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import RatingStars from "../../core/HomePage/common/RatingStars";
+import GetAvgRating from "../../../utils/avgRating";
 
 function HealthProgram_Card({ healthProgram, Height = "h-[220px]" }) {
-  const [avgReviewCount, setAvgReviewCount] = useState(0)
+  const [avgReviewCount, setAvgReviewCount] = useState(0);
 
   useEffect(() => {
     if (healthProgram?.ratingAndReviews?.length > 0) {
-      const count = GetAvgRating(healthProgram.ratingAndReviews)
-      setAvgReviewCount(count)
+      const count = GetAvgRating(healthProgram.ratingAndReviews);
+      setAvgReviewCount(isNaN(count) ? 0 : count);
     } else {
-      setAvgReviewCount(0)
+      setAvgReviewCount(0);
     }
-  }, [healthProgram?.ratingAndReviews])
+  }, [healthProgram?.ratingAndReviews]);
 
-  if (!healthProgram) return null
+  if (!healthProgram) return null;
 
   return (
     <Link to={`/healthPrograms/${healthProgram._id}`}>
@@ -39,9 +39,17 @@ function HealthProgram_Card({ healthProgram, Height = "h-[220px]" }) {
               : "By Expert"}
           </p>
 
+          {/* ⭐ Rating Section */}
           <div className="flex items-center gap-2 text-sm text-richblack-300">
-            <span className="font-medium">{avgReviewCount}</span>
-            <RatingStars Review_Count={avgReviewCount} />
+            <span className="font-medium">
+              {isNaN(avgReviewCount) ? 0 : avgReviewCount}
+            </span>
+
+            <RatingStars
+              Review_Count={isNaN(avgReviewCount) ? 0 : avgReviewCount}
+              Star_Size={18}
+            />
+
             <span>
               ({healthProgram?.ratingAndReviews?.length || 0})
             </span>
@@ -56,7 +64,7 @@ function HealthProgram_Card({ healthProgram, Height = "h-[220px]" }) {
         </div>
       </div>
     </Link>
-  )
+  );
 }
 
-export default HealthProgram_Card
+export default HealthProgram_Card;

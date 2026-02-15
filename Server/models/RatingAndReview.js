@@ -1,27 +1,36 @@
 const mongoose = require("mongoose");
-const HealthProgram = require("./HealthProgram");
 
-const ratingAndReviewSchema = new mongoose.Schema({
-    
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:"User"
+const ratingAndReviewSchema = new mongoose.Schema(
+  {
+    rating: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
     },
-    rating:{
-        type:Number,
-        required:true
-    },
-    review:{
-        type:Number,
-        required:true
-    },
-	HealthProgram: {
-		type: mongoose.Schema.Types.ObjectId,
-		required: true,
-		ref: "HealthProgram",
-		index: true,
-	}
 
-});
-module.exports = mongoose.model("RatingAndReview",ratingAndReviewSchema)
+    review: {
+      type: String, // 🔥 MUST BE STRING
+      required: true,
+      trim: true,
+    },
+
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    healthProgram: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "HealthProgram",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model(
+  "RatingAndReview",
+  ratingAndReviewSchema
+);

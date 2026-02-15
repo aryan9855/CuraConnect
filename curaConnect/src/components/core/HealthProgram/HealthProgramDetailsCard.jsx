@@ -26,16 +26,18 @@ function HealthProgramDetailsCard({
   } = healthProgram;
 
   const isEnrolled =
-    user && patientsEnrolled?.includes(user?._id);
+    user &&
+    patientsEnrolled?.some(
+      (id) => id.toString() === user?._id?.toString()
+    );
 
   const isInCart =
-    cart?.some((item) => item._id === _id);
+    cart?.some(
+      (item) => item._id?.toString() === _id?.toString()
+    );
 
   const handleAddToCart = () => {
-    if (!_id) {
-      console.log("Invalid healthProgram object");
-      return;
-    }
+    if (!_id) return;
 
     if (!token) {
       setConfirmationModel({
@@ -56,13 +58,13 @@ function HealthProgramDetailsCard({
     <div className="bg-richblack-800 p-6 rounded-2xl shadow-xl w-full max-w-[420px]">
 
       <img
-        src={thumbnail}
+        src={thumbnail || "/default-thumbnail.jpg"}
         alt="Health Program Thumbnail"
         className="w-full rounded-xl object-cover mb-4"
       />
 
       <div className="text-2xl font-bold mb-4">
-        ₹ {price}
+        ₹ {Number(price || 0)}
       </div>
 
       <div className="flex flex-col gap-3">

@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-// ================== Controllers ==================
+// ================== CONTROLLERS ==================
 
-// HealthProgram Controllers
 const {
   createHealthProgram,
   getAllHealthPrograms,
@@ -12,29 +11,26 @@ const {
   editHealthProgram,
   getDoctorHealthPrograms,
   deleteHealthProgram,
-  unenrollFromHealthProgram,   // ✅ ADDED THIS
+  unenrollFromHealthProgram,
 } = require("../controllers/HealthProgram");
 
-// HealthProgram Progress
 const {
-  updateHealthProgramProgress,
-} = require("../controllers/HealthProgramProgress");
+  createRating,
+  getAverageRating,
+  getAllRating
+} = require("../controllers/RatingAndReview");
 
-// Category Controllers
+
+
+const { updateHealthProgramProgress } =
+  require("../controllers/HealthProgramProgress");
+
+
 const {
   createCategory,
   showAllCategories,
   categoryPageDetails,
 } = require("../controllers/Category");
-
-// ================== Middlewares ==================
-
-const {
-  auth,
-  isDoctor,
-  isPatient,
-  isAdmin,
-} = require("../middlewares/auth");
 
 const {
   addSection,
@@ -48,15 +44,46 @@ const {
   deleteSubSection,
 } = require("../controllers/SubSection");
 
+// ================== MIDDLEWARES ==================
+
+const {
+  auth,
+  isDoctor,
+  isPatient,
+  isAdmin,
+} = require("../middlewares/auth");
+
 // ================== HEALTH PROGRAM ROUTES ==================
 
 router.post("/createHealthProgram", auth, isDoctor, createHealthProgram);
+
 router.get("/getAllHealthPrograms", getAllHealthPrograms);
+
 router.post("/getHealthProgramDetails", getHealthProgramDetails);
-router.post("/getFullHealthProgramDetails", auth, getFullHealthProgramDetails);
+
+router.post(
+  "/getFullHealthProgramDetails",
+  auth,
+  getFullHealthProgramDetails
+);
+
 router.post("/editHealthProgram", auth, isDoctor, editHealthProgram);
-router.get("/getDoctorHealthPrograms", auth, isDoctor, getDoctorHealthPrograms);
-router.delete("/deleteHealthProgram", auth, isDoctor, deleteHealthProgram);
+
+router.get(
+  "/getDoctorHealthPrograms",
+  auth,
+  isDoctor,
+  getDoctorHealthPrograms
+);
+
+router.delete(
+  "/deleteHealthProgram",
+  auth,
+  isDoctor,
+  deleteHealthProgram
+);
+
+// ================== PROGRESS ==================
 
 router.post(
   "/updateHealthProgramProgress",
@@ -65,36 +92,57 @@ router.post(
   updateHealthProgramProgress
 );
 
-// ================== CATEGORY ROUTES ==================
 
-// Admin creates category
+// ================== CATEGORY ==================
+
 router.post("/createCategory", auth, isAdmin, createCategory);
 
-// Get all categories
 router.get("/showAllCategories", showAllCategories);
 
-// Category page details
 router.post("/getCategoryPageDetails", categoryPageDetails);
 
-// ================== SECTION ROUTES ==================
+// ================== SECTION ==================
 
 router.post("/addSection", auth, isDoctor, addSection);
+
 router.post("/updateSection", auth, isDoctor, updateSection);
+
 router.post("/deleteSection", auth, isDoctor, deleteSection);
 
-// ================== SUB SECTION ROUTES ==================
+// ================== SUBSECTION ==================
 
 router.post("/addSubSection", auth, isDoctor, addSubSection);
+
 router.post("/updateSubSection", auth, isDoctor, updateSubSection);
+
 router.post("/deleteSubSection", auth, isDoctor, deleteSubSection);
 
-// ================== UNENROLL ROUTE ==================
+// ================== UNENROLL ==================
 
 router.post(
   "/unenroll",
   auth,
   isPatient,
-  unenrollFromHealthProgram   // ✅ NOW PROPERLY IMPORTED
+  unenrollFromHealthProgram
 );
+// ================== RATING ROUTES ==================
+
+router.post(
+  "/createRating",
+  auth,
+  isPatient,
+  createRating
+);
+
+router.post(
+  "/getAverageRating",
+  getAverageRating
+);
+
+router.get(
+  "/getAllRating",
+  getAllRating
+);
+
 
 module.exports = router;

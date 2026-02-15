@@ -47,9 +47,9 @@ function HealthProgramDetails() {
   useEffect(() => {
     if (healthProgramData?.healthProgram?.ratingAndReviews) {
       const count = GetAvgRating(
-        healthProgramData.healthProgram.ratingAndReviews
+        healthProgramData.healthProgram.ratingAndReviews,
       );
-      setAvgReviewCount(count);
+      setAvgReviewCount(Number(count) || 0);
     }
   }, [healthProgramData]);
 
@@ -60,7 +60,7 @@ function HealthProgramDetails() {
     healthProgramData?.healthProgram?.healthProgramContent?.forEach(
       (section) => {
         lectures += section.subSection?.length || 0;
-      }
+      },
     );
 
     setTotalNoOfLectures(lectures);
@@ -70,20 +70,14 @@ function HealthProgramDetails() {
     setIsActive(
       !isActive.includes(id)
         ? isActive.concat(id)
-        : isActive.filter((e) => e !== id)
+        : isActive.filter((e) => e !== id),
     );
   };
 
   // ================= BUY HANDLER =================
   const handleBuyHealthProgram = () => {
     if (token) {
-      buyHealthProgram(
-        token,
-        [healthProgramId],
-        user,
-        navigate,
-        dispatch
-      );
+      buyHealthProgram(token, [healthProgramId], user, navigate, dispatch);
     } else {
       setConfirmationModel({
         text1: "You are not logged in",
@@ -128,7 +122,7 @@ function HealthProgramDetails() {
     thumbnail,
     price,
     ratingAndReviews,
-    patientsEnrolled,
+    patientEnrolled,
     doctor,
     createdAt,
     instructions,
@@ -136,35 +130,19 @@ function HealthProgramDetails() {
     healthProgramContent,
   } = healthProgramData.healthProgram;
 
-  const isEnrolled =
-    user && patientsEnrolled?.includes(user?._id);
+  const isEnrolled = user && patientEnrolled?.includes(user?._id);
 
-  const isInCart =
-    cart?.some((item) => item._id === _id);
+  const isInCart = cart?.some((item) => item._id === _id);
 
   return (
     <div className="w-full min-h-screen text-white px-6 py-10">
-
       <div className="max-w-[1200px] mx-auto">
-
         {/* ================= TOP SECTION ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-
           {/* LEFT SIDE */}
           <div className="lg:col-span-2 space-y-6">
-          <div
-    className="
-      space-y-6
-      bg-white/5
-      backdrop-blur-xl
-      border border-white/10
-      rounded-2xl
-      p-8
-      shadow-xl
-    "
-  >
             <div
-    className="
+              className="
       space-y-6
       bg-white/5
       backdrop-blur-xl
@@ -173,71 +151,69 @@ function HealthProgramDetails() {
       p-8
       shadow-xl
     "
-  >
-            <h1 className="text-4xl font-bold">
-              {healthProgramName}
-            </h1>
-            </div>
+            >
+              <div
+                className="
+      space-y-6
+      bg-white/5
+      backdrop-blur-xl
+      border border-white/10
+      rounded-2xl
+      p-8
+      shadow-xl
+    "
+              >
+                <h1 className="text-4xl font-bold">{healthProgramName}</h1>
+              </div>
 
-            <p className="text-richblack-300 text-lg">
-              {healthProgramDescription}
-            </p>
+              <p className="text-richblack-300 text-lg">
+                {healthProgramDescription}
+              </p>
 
-            <div className="flex items-center gap-3 text-sm">
-              <span className="font-semibold text-yellow-200">
-                {avgReviewCount}
-              </span>
-
-              <RatingStars
-                Review_Count={avgReviewCount}
-                Star_Size={20}
-              />
-
-              <span>
-                ({ratingAndReviews?.length || 0} reviews)
-              </span>
-
-              <span>
-                • {patientsEnrolled?.length || 0} patients enrolled
-              </span>
-            </div>
-
-            <div className="text-sm text-richblack-300 space-y-1">
-              <p>
-                Created By{" "}
-                <span className="text-blue-300 font-semibold">
-                  {doctor?.firstName} {doctor?.lastName}
+              <div className="flex items-center gap-3 text-sm">
+                <span className="font-semibold text-yellow-200">
+                  {isNaN(avgReviewCount) ? "0.0" : avgReviewCount.toFixed(1)}
                 </span>
-              </p>
 
-              <p>
-                Created At {createdAt ? formatDate(createdAt) : ""}
-              </p>
+                <RatingStars
+                  Review_Count={isNaN(avgReviewCount) ? 0 : avgReviewCount}
+                  Star_Size={20}
+                />
 
-              <p>Language: English</p>
-              <p>Total Lectures: {totalNoOfLectures}</p>
+                <span>({ratingAndReviews?.length || 0} reviews)</span>
+
+                <span>• {patientEnrolled?.length || 0} patients enrolled</span>
+              </div>
+
+              <div className="text-sm text-richblack-300 space-y-1">
+                <p>
+                  Created By{" "}
+                  <span className="text-blue-300 font-semibold">
+                    {doctor?.firstName} {doctor?.lastName}
+                  </span>
+                </p>
+
+                <p>Created At {createdAt ? formatDate(createdAt) : ""}</p>
+
+                <p>Language: English</p>
+                <p>Total Lectures: {totalNoOfLectures}</p>
+              </div>
             </div>
           </div>
-            </div>
 
           {/* RIGHT SIDE PURCHASE CARD */}
           <div className="bg-richblack-800 rounded-xl p-6 shadow-xl h-fit sticky top-24">
-
             <img
               src={thumbnail}
               alt="Health Program Thumbnail"
               className="rounded-lg w-full mb-4"
             />
 
-            <p className="text-3xl font-bold mb-4">
-              ₹ {price}
-            </p>
+            <p className="text-3xl font-bold mb-4">₹ {price}</p>
 
             {isEnrolled ? (
               <button
-                onClick={() =>
-                  navigate("/dashboard/enrolled-health-programs")
-                }
+                onClick={() => navigate("/dashboard/enrolled-health-programs")}
                 className="w-full bg-green-600 hover:bg-green-700 transition py-3 rounded-lg font-semibold"
               >
                 Go to Health Program
@@ -275,26 +251,18 @@ function HealthProgramDetails() {
 
         {/* ================= WHAT YOU WILL LEARN ================= */}
         <div className="mt-12 bg-richblack-800 rounded-xl p-8">
-          <h2 className="text-2xl font-semibold mb-4">
-            What You Will Learn
-          </h2>
-          <p className="text-richblack-300">
-            {whatYouWillLearn}
-          </p>
+          <h2 className="text-2xl font-semibold mb-4">What You Will Learn</h2>
+          <p className="text-richblack-300">{whatYouWillLearn}</p>
         </div>
 
         {/* ================= CONTENT ================= */}
         <div className="mt-12 bg-richblack-800 rounded-xl p-8">
-
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-2xl font-semibold">
-                Health Program Content
-              </h2>
+              <h2 className="text-2xl font-semibold">Health Program Content</h2>
               <p className="text-sm text-richblack-300 mt-1">
                 {healthProgramContent?.length || 0} section(s) •{" "}
-                {totalNoOfLectures} lectures •{" "}
-                {healthProgramData.totalDuration}
+                {totalNoOfLectures} lectures • {healthProgramData.totalDuration}
               </p>
             </div>
 
@@ -316,12 +284,8 @@ function HealthProgramDetails() {
                   onClick={() => handleActive(section._id)}
                   className="flex justify-between cursor-pointer"
                 >
-                  <h3 className="font-semibold">
-                    {section.sectionName}
-                  </h3>
-                  <span>
-                    {section.subSection?.length || 0} lecture(s)
-                  </span>
+                  <h3 className="font-semibold">{section.sectionName}</h3>
+                  <span>{section.subSection?.length || 0} lecture(s)</span>
                 </div>
 
                 {isActive.includes(section._id) && (
@@ -340,12 +304,9 @@ function HealthProgramDetails() {
             ))}
           </div>
         </div>
-
       </div>
 
-      {confirmationModel && (
-        <ConfirmationModel modelData={confirmationModel} />
-      )}
+      {confirmationModel && <ConfirmationModel modelData={confirmationModel} />}
     </div>
   );
 }

@@ -1,67 +1,73 @@
-const SubSection = require("../models/SubSection");
 const HealthProgramProgress = require("../models/HealthProgramProgress");
+const SubSection = require("../models/SubSection");
+const HealthProgram = require("../models/HealthProgram");
 
+// =============================================
+// MARK LECTURE AS COMPLETE
+// =============================================
 exports.updateHealthProgramProgress = async (req, res) => {
+
+
+
   try {
     const { healthProgramId, subsectionId } = req.body;
     const userId = req.user.id;
 
-    // Validation
     if (!healthProgramId || !subsectionId) {
       return res.status(400).json({
         success: false,
-        message: "healthProgramId and subsectionId are required",
+        message: "HealthProgram ID and SubSection ID are required",
       });
     }
 
-    // Check if subsection exists
-    const subsection = await SubSection.findById(subsectionId);
-    if (!subsection) {
+    // 1️⃣ Check subsection exists
+    const subSection = await SubSection.findById(subsectionId);
+    if (!subSection) {
       return res.status(404).json({
         success: false,
-        message: "Invalid subsection",
+        message: "Invalid SubSection",
       });
     }
 
-    // Find or create progress document
-    let healthProgramProgress = await HealthProgramProgress.findOne({
+    // 2️⃣ Find progress document
+    let progress = await HealthProgramProgress.findOne({
       healthProgramID: healthProgramId,
-      userId: userId,
+      userId,
     });
 
-    if (!healthProgramProgress) {
-      // Create new progress document if it doesn't exist
-      healthProgramProgress = await HealthProgramProgress.create({
+    // 3️⃣ If not exists → create it automatically
+    if (!progress) {
+      progress = await HealthProgramProgress.create({
         healthProgramID: healthProgramId,
-        userId: userId,
-        completedVideos: [],
+        userId,
+        completedVideos: [subsectionId],
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "Lecture marked as completed",
       });
     }
 
-    // Initialize completedVideos if it doesn't exist
-    if (!healthProgramProgress.completedVideos) {
-      healthProgramProgress.completedVideos = [];
-    }
-
-    // Check if already completed
-    if (healthProgramProgress.completedVideos.includes(subsectionId)) {
+    // 4️⃣ Prevent duplicate completion
+    if (progress.completedVideos.includes(subsectionId)) {
       return res.status(400).json({
         success: false,
-        message: "Subsection already completed",
+        message: "Lecture already completed",
       });
     }
 
-    // Mark subsection as completed
-    healthProgramProgress.completedVideos.push(subsectionId);
-    await healthProgramProgress.save();
+    // 5️⃣ Push new completed lecture
+    progress.completedVideos.push(subsectionId);
+    await progress.save();
 
     return res.status(200).json({
       success: true,
-      message: "Health program progress updated successfully",
-      data: healthProgramProgress,
+      message: "Lecture marked as completed",
     });
+
   } catch (error) {
-    console.error("Update Health Program Progress Error:", error);
+    console.error("MARK COMPLETE ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
