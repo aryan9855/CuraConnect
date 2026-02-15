@@ -53,7 +53,11 @@ const {
   isAdmin,
 } = require("../middlewares/auth");
 
+const { getReviews } = require("../controllers/RatingAndReview");
+
+
 // ================== HEALTH PROGRAM ROUTES ==================
+router.get("/getReviews", getReviews);
 
 router.post("/createHealthProgram", auth, isDoctor, createHealthProgram);
 

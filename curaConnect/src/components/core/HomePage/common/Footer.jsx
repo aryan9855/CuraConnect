@@ -34,7 +34,7 @@ const Community = [
 
 const Footer = () => {
   return (
-    <div className="bg-richblack-800">
+    <div className="bg-richblack-800 mt-10">
       <div className="flex lg:flex-row gap-8 items-center justify-between w-11/12 max-w-maxContent text-richblack-400 leading-6 mx-auto relative py-14">
         <div className="border-b w-full flex flex-col lg:flex-row pb-5 border-richblack-700">
 

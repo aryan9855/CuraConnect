@@ -10,6 +10,7 @@ import LearningHealthcare from '../components/core/HomePage/LearningHealthcare'
 import DoctorSection from '../components/core/HomePage/DoctorSection'
 import Footer from '../components/core/HomePage/common/Footer'
 import ExploreMore from '../components/core/HomePage/ExploreMore'
+import ReviewSlider from '../components/core/HomePage/common/ReviewSlider'
 
 
 function Home() {
@@ -154,11 +155,11 @@ function Home() {
 
         <DoctorSection />
 
-        <h2 className='text-center text-4xl font-semibold mt-10'> Reviews frrom other learners</h2>
-
         {/* Reviews slider */}
-
-
+        <h1 className="text-center text-4xl font-semibold mt-8">
+          Reviews from other learners
+        </h1>
+        <ReviewSlider />
       </div>
 
 
