@@ -1,108 +1,220 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
-import ReactStars from "react-rating-stars-component";
-import IconBtn from "../HomePage/common/IconBtn";
-import { createRating } from "../../../services/operations/profileAPI";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
-function HealthProgramReviewModel({ setReviewModel }) {
-  const { user } = useSelector((state) => state.profile);
+import { markLectureAsComplete } from "../../../services/operations/healthProgramDetailsAPI";
+import { updateCompletedLectures } from "../../../slices/viewHealthProgramSlice";
+
+import IconBtn from "../../core/HomePage/common/IconBtn";
+
+const VideoDetails = () => {
+  const { healthProgramId, sectionId, subSectionId } = useParams();
+  const navigate = useNavigate();
+  const playerRef = useRef(null);
+  const dispatch = useDispatch();
+
   const { token } = useSelector((state) => state.auth);
-  const { healthProgramEntireData } = useSelector(
-    (state) => state.viewHealthProgram
-  );
-
   const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
+    healthProgramSectionData,
+    healthProgramEntireData,
+    completedLectures,
+  } = useSelector((state) => state.viewHealthProgram);
+
+  const [videoData, setVideoData] = useState(null);
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  /* ================= LOAD VIDEO ================= */
 
   useEffect(() => {
-    setValue("healthProgramExperience", "");
-    setValue("healthProgramRating", 0);
-  }, [setValue]);
+    if (!healthProgramSectionData?.length) return;
 
-  const onSubmit = async (data) => {
-    await createRating(
-      {
-        healthProgramId: healthProgramEntireData?._id,
-        rating: data.healthProgramRating,
-        review: data.healthProgramExperience,
-      },
-      token
+    const currentSection = healthProgramSectionData.find(
+      (section) => section._id.toString() === sectionId
     );
 
-    setReviewModel(false);
+    if (!currentSection) return;
+
+    const currentSubSection = currentSection.subSection.find(
+      (sub) => sub._id.toString() === subSectionId
+    );
+
+    if (!currentSubSection) return;
+
+    setVideoData(currentSubSection);
+    setVideoEnded(false);
+
+  }, [healthProgramSectionData, sectionId, subSectionId]);
+
+  /* ================= HELPERS ================= */
+
+  const getIndexes = () => {
+    const sectionIndex = healthProgramSectionData.findIndex(
+      (sec) => sec._id.toString() === sectionId
+    );
+
+    if (sectionIndex === -1) return null;
+
+    const subSectionIndex =
+      healthProgramSectionData[sectionIndex].subSection.findIndex(
+        (sub) => sub._id.toString() === subSectionId
+      );
+
+    if (subSectionIndex === -1) return null;
+
+    return { sectionIndex, subSectionIndex };
   };
 
-  const ratingChanged = (newRating) => {
-    setValue("healthProgramRating", newRating);
+  const isFirstVideo = () => {
+    const idx = getIndexes();
+    return idx && idx.sectionIndex === 0 && idx.subSectionIndex === 0;
   };
+
+  const isLastVideo = () => {
+    const idx = getIndexes();
+    if (!idx) return false;
+
+    return (
+      idx.sectionIndex === healthProgramSectionData.length - 1 &&
+      idx.subSectionIndex ===
+        healthProgramSectionData[idx.sectionIndex].subSection.length - 1
+    );
+  };
+
+  const goToNextVideo = () => {
+    const idx = getIndexes();
+    if (!idx) return;
+
+    const { sectionIndex, subSectionIndex } = idx;
+    const currentSection = healthProgramSectionData[sectionIndex];
+
+    if (subSectionIndex < currentSection.subSection.length - 1) {
+      const nextId =
+        currentSection.subSection[subSectionIndex + 1]._id;
+
+      navigate(
+        `/view-healthProgram/${healthProgramId}/section/${sectionId}/sub-section/${nextId}`
+      );
+    } else if (sectionIndex < healthProgramSectionData.length - 1) {
+      const nextSection = healthProgramSectionData[sectionIndex + 1];
+      navigate(
+        `/view-healthProgram/${healthProgramId}/section/${nextSection._id}/sub-section/${nextSection.subSection[0]._id}`
+      );
+    }
+  };
+
+  const goToPrevVideo = () => {
+    const idx = getIndexes();
+    if (!idx) return;
+
+    const { sectionIndex, subSectionIndex } = idx;
+
+    if (subSectionIndex > 0) {
+      const prevId =
+        healthProgramSectionData[sectionIndex].subSection[
+          subSectionIndex - 1
+        ]._id;
+
+      navigate(
+        `/view-healthProgram/${healthProgramId}/section/${sectionId}/sub-section/${prevId}`
+      );
+    } else if (sectionIndex > 0) {
+      const prevSection =
+        healthProgramSectionData[sectionIndex - 1];
+
+      navigate(
+        `/view-healthProgram/${healthProgramId}/section/${prevSection._id}/sub-section/${
+          prevSection.subSection[prevSection.subSection.length - 1]._id
+        }`
+      );
+    }
+  };
+
+  /* ================= MARK COMPLETE ================= */
+
+  const handleLectureCompletion = async () => {
+    try {
+      setLoading(true);
+
+      const res = await markLectureAsComplete(
+        { healthProgramId, subsectionId: subSectionId },
+        token
+      );
+
+      if (res) {
+        dispatch(updateCompletedLectures(subSectionId));
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!videoData) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg w-[400px]">
-        <div className="flex justify-between items-center mb-4">
-          <p className="text-lg font-semibold">Add Review</p>
-          <button onClick={() => setReviewModel(false)}>Close</button>
-        </div>
+    <div className="flex flex-col gap-5 text-white">
 
-        <div className="flex items-center gap-3 mb-4">
-          <img
-            src={user?.image}
-            alt="user"
-            className="w-10 h-10 rounded-full"
-          />
-          <div>
-            <p>{user?.firstName} {user?.lastName}</p>
-            <p className="text-sm text-gray-500">Posting Publicly</p>
-          </div>
-        </div>
+      <div className="relative">
+        <video
+          ref={playerRef}
+          className="w-full rounded-md"
+          controls
+          onEnded={() => setVideoEnded(true)}
+        >
+          <source src={videoData.videoUrl} type="video/mp4" />
+        </video>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ReactStars
-            count={5}
-            onChange={ratingChanged}
-            size={24}
-            activeColor="#ffc700"
-          />
+        {videoEnded && (
+          <div className="absolute inset-0 grid place-content-center bg-black/80">
 
-          <div className="mt-4">
-            <label htmlFor="healthProgramExperience">
-              Add Your Experience
-            </label>
+            {!completedLectures.includes(subSectionId) && (
+              <IconBtn
+                disabled={loading}
+                onClick={handleLectureCompletion}
+                text={!loading ? "Mark As Completed" : "Loading..."}
+              />
+            )}
 
-            <textarea
-              id="healthProgramExperience"
-              placeholder="Add your experience here"
-              {...register("healthProgramExperience", { required: true })}
-              className="form-style w-full mt-2"
+            <IconBtn
+              disabled={loading}
+              onClick={() => {
+                if (playerRef.current) {
+                  playerRef.current.currentTime = 0;
+                  playerRef.current.play();
+                  setVideoEnded(false);
+                }
+              }}
+              text="Rewatch"
+              customClasses="mt-3"
             />
 
-            {errors.healthProgramExperience && (
-              <span className="text-red-500 text-sm">
-                Please add your experience
-              </span>
-            )}
-          </div>
+            <div className="mt-6 flex gap-4 justify-center">
+              {!isFirstVideo() && (
+                <button onClick={goToPrevVideo} className="blackButton">
+                  Prev
+                </button>
+              )}
+              {!isLastVideo() && (
+                <button onClick={goToNextVideo} className="blackButton">
+                  Next
+                </button>
+              )}
+            </div>
 
-          <div className="flex justify-end gap-3 mt-4">
-            <button
-              type="button"
-              onClick={() => setReviewModel(false)}
-              className="px-4 py-2 bg-gray-300 rounded"
-            >
-              Cancel
-            </button>
-
-            <IconBtn text="Save" type="submit" />
           </div>
-        </form>
+        )}
       </div>
+
+      <h1 className="text-3xl font-semibold">
+        {videoData.title}
+      </h1>
+
+      <p>{videoData.description}</p>
+
     </div>
   );
-}
+};
 
-export default HealthProgramReviewModel;
+export default VideoDetails;
