@@ -18,6 +18,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import About from "./pages/About";
+import ContactFormSection from "./components/core/AboutPage/ContactFormSection";
 
 import MyProfile from "./components/core/Dashboard/MyProfile";
 import Dashboard from "./pages/Dashboard";
@@ -127,11 +128,12 @@ function App() {
 
           <Route
             path="/about"
-            element={
-              <OpenRoute>
-                <About />
-              </OpenRoute>
-            }
+            element={<About />}
+          />
+
+          <Route
+            path="/contact"
+            element={<ContactFormSection />}
           />
 
           {/* ================= DASHBOARD ================= */}
@@ -206,3 +208,8 @@ function App() {
 }
 
 export default App;
+
+
+
+
+

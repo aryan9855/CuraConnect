@@ -158,13 +158,13 @@ const goToNextVideo = () => {
     
           <div className="relative rounded-xl overflow-hidden shadow-2xl aspect-video bg-black">
             <video
+              key={subSectionId}
               ref={playerRef}
               className="w-full h-full object-contain"
               controls
+              src={videoData.videoUrl}
               onEnded={() => setVideoEnded(true)}
-            >
-              <source src={videoData.videoUrl} type="video/mp4" />
-            </video>
+            />
     
             {videoEnded && (
               <div className="absolute inset-0 grid place-content-center bg-black/80 backdrop-blur-sm">

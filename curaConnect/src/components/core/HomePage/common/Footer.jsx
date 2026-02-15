@@ -32,6 +32,19 @@ const Community = [
   "Health Events",
 ];
 
+const footerRouteMap = {
+  "About CuraConnect": "/about",
+  Careers: "/contact",
+  "For Doctors": "/signup",
+  "Doctor Registration": "/signup",
+  "Privacy Policy": "/about",
+  "Cookie Policy": "/about",
+  Terms: "/about",
+  "Help Center": "/contact",
+};
+
+const getFooterPath = (label) => footerRouteMap[label] || "/contact";
+
 const Footer = () => {
   return (
     <div className="bg-richblack-800 mt-10">
@@ -57,7 +70,7 @@ const Footer = () => {
                 {["About CuraConnect", "Careers", "For Doctors"].map((ele, i) => (
                   <Link
                     key={i}
-                    to={ele.split(" ").join("-").toLowerCase()}
+                    to={getFooterPath(ele)}
                     className="text-[14px] hover:text-richblack-50 transition-all duration-200"
                   >
                     {ele}
@@ -82,7 +95,7 @@ const Footer = () => {
                 {Resources.map((ele, index) => (
                   <Link
                     key={index}
-                    to={ele.split(" ").join("-").toLowerCase()}
+                    to={getFooterPath(ele)}
                     className="text-[14px] hover:text-richblack-50 transition-all duration-200"
                   >
                     {ele}
@@ -95,7 +108,7 @@ const Footer = () => {
               </h1>
 
               <Link
-                to="/help-center"
+                to={getFooterPath("Help Center")}
                 className="text-[14px] hover:text-richblack-50 transition-all duration-200 mt-2 inline-block"
               >
                 Help Center
@@ -112,7 +125,7 @@ const Footer = () => {
                 {Plans.map((ele, index) => (
                   <Link
                     key={index}
-                    to={ele.split(" ").join("-").toLowerCase()}
+                    to={getFooterPath(ele)}
                     className="text-[14px] hover:text-richblack-50 transition-all duration-200"
                   >
                     {ele}
@@ -128,7 +141,7 @@ const Footer = () => {
                 {Community.map((ele, index) => (
                   <Link
                     key={index}
-                    to={ele.split(" ").join("-").toLowerCase()}
+                    to={getFooterPath(ele)}
                     className="text-[14px] hover:text-richblack-50 transition-all duration-200"
                   >
                     {ele}
@@ -150,7 +163,7 @@ const Footer = () => {
                   {ele.links.map((link, index) => (
                     <Link
                       key={index}
-                      to={link.link}
+                      to={getFooterPath(link.title)}
                       className="text-[14px] hover:text-richblack-50 transition-all duration-200"
                     >
                       {link.title}
@@ -172,7 +185,7 @@ const Footer = () => {
             {BottomFooter.map((ele, i) => (
               <Link
                 key={i}
-                to={ele.split(" ").join("-").toLowerCase()}
+                to={getFooterPath(ele)}
                 className={`px-3 ${
                   i !== BottomFooter.length - 1 &&
                   "border-r border-richblack-700"
@@ -184,7 +197,7 @@ const Footer = () => {
           </div>
 
           <div className="text-center">
-            © {new Date().getFullYear()} CuraConnect. All rights reserved.
+            &copy; {new Date().getFullYear()} CuraConnect. All rights reserved.
           </div>
 
         </div>

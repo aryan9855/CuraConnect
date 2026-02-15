@@ -168,7 +168,7 @@ export default function Doctor() {
             You have not created any Health Programs yet
           </p>
 
-          <Link to="/dashboard/add-health-program">
+          <Link to="/dashboard/add-health-programs">
             <p className="mt-4 text-lg font-semibold text-yellow-400 hover:text-yellow-300 transition">
               Create a Health Program
             </p>
@@ -178,3 +178,4 @@ export default function Doctor() {
     </div>
   )
 }
+
