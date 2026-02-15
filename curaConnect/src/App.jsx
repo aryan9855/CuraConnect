@@ -31,6 +31,12 @@ import EnrolledHealthPrograms from "./components/core/Dashboard/EnrolledHealthPr
 import EditHealthProgram from "./components/core/Dashboard/EditHealthProgram/EditHealthProgram";
 import Catalog from "./pages/Catalog";
 import HealthProgramDetails from "./pages/HealthProgramDetails";
+import ViewHealthProgram from "./pages/ViewHealthProgram";
+import VideoDetails from "./components/core/ViewHealthProgram/VideoDetails";
+import AutoRedirectToFirstLecture from "./components/core/ViewHealthProgram/AutoRedirectToFirstLecture";
+
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -167,6 +173,27 @@ function App() {
               </>
             )}
           </Route>
+          <Route
+  path="/view-healthProgram/:healthProgramId"
+  element={
+    <PrivateRoute>
+      <ViewHealthProgram />
+    </PrivateRoute>
+  }
+>
+  {/* 👇 THIS IS IMPORTANT */}
+  <Route index element={<AutoRedirectToFirstLecture />} />
+
+  <Route
+    path="section/:sectionId/sub-section/:subSectionId"
+    element={<VideoDetails />}
+  />
+</Route>
+
+
+
+
+
 
           {/* ================= FALLBACK ================= */}
           <Route path="*" element={<Error />} />

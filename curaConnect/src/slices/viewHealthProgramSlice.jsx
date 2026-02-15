@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   healthProgramSectionData: [],
-  healthProgramEntireData: [],
+  healthProgramEntireData: null,
   completedLectures: [],
   totalNoOfLectures: 0,
 }

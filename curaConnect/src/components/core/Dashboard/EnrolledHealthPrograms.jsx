@@ -92,7 +92,7 @@ function EnrolledHealthPrograms() {
                 <div
                   className="flex gap-4 items-center cursor-pointer"
                   onClick={() =>
-                    navigate(`/healthPrograms/${healthProgram._id}`)
+                    navigate(`/view-healthProgram/${healthProgram._id}`)
                   }
                 >
                   <img

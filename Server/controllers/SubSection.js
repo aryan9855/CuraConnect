@@ -1,36 +1,27 @@
-const Section = require("../models/Section")
-const SubSection = require("../models/SubSection")
-const HealthProgram = require("../models/HealthProgram")
-const { uploadImageToCloudinary } = require("../utils/imageUploader")
+const Section = require("../models/Section");
+const SubSection = require("../models/SubSection");
+const HealthProgram = require("../models/HealthProgram");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 // ========================================
 // CREATE SubSection
 // ========================================
 exports.addSubSection = async (req, res) => {
   try {
-    const { sectionId, title, description } = req.body
+    const { sectionId, title, description } = req.body;
 
     if (!sectionId || !title || !description || !req.files?.video) {
       return res.status(400).json({
         success: false,
         message: "All fields including video are required",
-      })
+      });
     }
 
-    // Upload video
     const uploadResponse = await uploadImageToCloudinary(
       req.files.video,
       process.env.FOLDER_NAME
-    )
+    );
 
-    if (!uploadResponse?.secure_url) {
-      return res.status(500).json({
-        success: false,
-        message: "Video upload failed",
-      })
-    }
-
-    // Create SubSection
     const newSubSection = await SubSection.create({
       title,
       description,
@@ -38,160 +29,152 @@ exports.addSubSection = async (req, res) => {
       timeDuration: uploadResponse.duration
         ? uploadResponse.duration.toString()
         : "0",
-    })
+    });
 
-    // Push into Section
+    // ✅ FIXED lowercase
     await Section.findByIdAndUpdate(
       sectionId,
       {
-        $push: { SubSection: newSubSection._id },
+        $push: { subSection: newSubSection._id },
       },
       { new: true }
-    )
+    );
 
-    // 🔥 IMPORTANT: RETURN FULL HEALTH PROGRAM
     const healthProgram = await HealthProgram.findOne({
       healthProgramContent: sectionId,
     })
       .populate({
         path: "healthProgramContent",
         populate: {
-          path: "SubSection",
+          path: "subSection",   // ✅ FIXED
         },
       })
-      .exec()
+      .exec();
 
     return res.status(200).json({
       success: true,
       message: "SubSection created successfully",
       data: healthProgram,
-    })
+    });
 
   } catch (error) {
-    console.error("Add SubSection Error:", error)
+    console.error("Add SubSection Error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
-    })
+    });
   }
-}
-
+};
 
 // ========================================
 // UPDATE SubSection
 // ========================================
 exports.updateSubSection = async (req, res) => {
   try {
-    const { subSectionId, title, description } = req.body
+    const { subSectionId, title, description } = req.body;
 
     if (!subSectionId) {
       return res.status(400).json({
         success: false,
         message: "SubSection ID is required",
-      })
+      });
     }
 
-    const updateData = {}
+    const updateData = {};
 
-    if (title) updateData.title = title
-    if (description) updateData.description = description
+    if (title) updateData.title = title;
+    if (description) updateData.description = description;
 
     if (req.files?.video) {
       const uploadResponse = await uploadImageToCloudinary(
         req.files.video,
         process.env.FOLDER_NAME
-      )
+      );
 
-      updateData.videoUrl = uploadResponse.secure_url
+      updateData.videoUrl = uploadResponse.secure_url;
       updateData.timeDuration = uploadResponse.duration
         ? uploadResponse.duration.toString()
-        : "0"
+        : "0";
     }
 
-    await SubSection.findByIdAndUpdate(
-      subSectionId,
-      updateData,
-      { new: true }
-    )
+    await SubSection.findByIdAndUpdate(subSectionId, updateData, {
+      new: true,
+    });
 
-    // Find section
+    // ✅ FIXED lowercase
     const section = await Section.findOne({
-      SubSection: subSectionId,
-    })
+      subSection: subSectionId,
+    });
 
-    // 🔥 RETURN FULL HEALTH PROGRAM
     const healthProgram = await HealthProgram.findOne({
       healthProgramContent: section._id,
     })
       .populate({
         path: "healthProgramContent",
         populate: {
-          path: "SubSection",
+          path: "subSection",
         },
       })
-      .exec()
+      .exec();
 
     return res.status(200).json({
       success: true,
       message: "SubSection updated successfully",
       data: healthProgram,
-    })
+    });
 
   } catch (error) {
-    console.error("Update SubSection Error:", error)
+    console.error("Update SubSection Error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
-    })
+    });
   }
-}
-
+};
 
 // ========================================
 // DELETE SubSection
 // ========================================
 exports.deleteSubSection = async (req, res) => {
   try {
-    const { subSectionId, sectionId } = req.body
+    const { subSectionId, sectionId } = req.body;
 
     if (!subSectionId || !sectionId) {
       return res.status(400).json({
         success: false,
         message: "SubSection ID and Section ID are required",
-      })
+      });
     }
 
-    // Remove reference
+    // ✅ FIXED lowercase
     await Section.findByIdAndUpdate(sectionId, {
-      $pull: { SubSection: subSectionId },
-    })
+      $pull: { subSection: subSectionId },
+    });
 
-    // Delete SubSection document
-    await SubSection.findByIdAndDelete(subSectionId)
+    await SubSection.findByIdAndDelete(subSectionId);
 
-    // 🔥 RETURN FULL HEALTH PROGRAM
     const healthProgram = await HealthProgram.findOne({
       healthProgramContent: sectionId,
     })
       .populate({
         path: "healthProgramContent",
         populate: {
-          path: "SubSection",
+          path: "subSection",
         },
       })
-      .exec()
+      .exec();
 
     return res.status(200).json({
       success: true,
       message: "SubSection deleted successfully",
       data: healthProgram,
-    })
+    });
 
   } catch (error) {
-    console.error("Delete SubSection Error:", error)
+    console.error("Delete SubSection Error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
-    })
+    });
   }
-}
+};

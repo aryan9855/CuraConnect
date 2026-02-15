@@ -20,6 +20,14 @@ export const apiConnector = async (
     return response
   } catch (error) {
     console.error("API ERROR:", error?.response?.data || error.message)
+  
+    // 🔐 Auto logout on 401
+    if (error?.response?.status === 401) {
+      localStorage.removeItem("token")
+      window.location.href = "/login"
+    }
+  
     throw error
   }
+  
 }

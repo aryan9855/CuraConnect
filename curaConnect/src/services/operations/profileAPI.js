@@ -96,3 +96,34 @@ export async function getDoctorDashboard(token) {
   toast.dismiss(toastId);
   return result;
 }
+
+
+import { healthProgramEndpoints } from "../apis";
+
+
+const { CREATE_RATING_API } = healthProgramEndpoints;
+
+
+export async function createRating(data, token) {
+  const toastId = toast.loading("Submitting Review...");
+  try {
+    const response = await apiConnector(
+      "POST",
+      CREATE_RATING_API,
+      data,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message);
+    }
+
+    toast.success("Review submitted successfully");
+  } catch (error) {
+    console.log("CREATE RATING ERROR:", error);
+    toast.error("Could not submit review");
+  }
+  toast.dismiss(toastId);
+}

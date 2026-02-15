@@ -35,7 +35,13 @@ export function getUserDetails(token) {
       dispatch(setUser(response.data.data))
     } catch (error) {
       console.error("GET USER DETAILS ERROR:", error)
+    
+      if (error?.response?.status === 401) {
+        // Token invalid or expired
+        dispatch(logout())
+      }
     }
+    
   }
 }
 

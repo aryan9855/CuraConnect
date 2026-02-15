@@ -1,10 +1,8 @@
-import { toast } from "react-hot-toast"
+import { toast } from "react-hot-toast";
+import { apiConnector } from "../apiconnector";
+import { healthProgramEndpoints, categoryEndpoints } from "../apis";
 
-import { updateCompletedLectures } from "../../slices/viewHealthProgramSlice"
-import { apiConnector } from "../apiconnector"
-import { healthProgramEndpoints, categoryEndpoints } from "../apis"
-
-/* ===================== DESTRUCTURE ENDPOINTS ===================== */
+/* ===================== ENDPOINTS ===================== */
 
 const {
   GET_ALL_HEALTHPROGRAMS_API,
@@ -27,130 +25,158 @@ const {
   UPDATE_HEALTHPROGRAM_PROGRESS_API,
 
   CREATE_RATING_API,
-} = healthProgramEndpoints
+} = healthProgramEndpoints;
 
-const { GET_ALL_CATEGORIES_API } = categoryEndpoints
+
+const { GET_ALL_CATEGORIES_API } = categoryEndpoints;
 
 /* ============================================================
    🌍 GET ALL HEALTH PROGRAMS
 ============================================================ */
 export const getAllHealthPrograms = async () => {
-  const toastId = toast.loading("Loading...")
-  let result = []
+  const toastId = toast.loading("Loading...");
+  let result = [];
 
   try {
     const response = await apiConnector(
       "GET",
       GET_ALL_HEALTHPROGRAMS_API
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not fetch health programs")
+      throw new Error("Could not fetch health programs");
     }
 
-    result = response.data.data
+    result = response.data.data;
   } catch (error) {
-    console.error("GET_ALL_HEALTHPROGRAMS_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
+  toast.dismiss(toastId);
+  return result;
+};
+
 /* ============================================================
-   👨‍⚕️ GET ALL DOCTOR HEALTH PROGRAMS
+   👨‍⚕️ GET DOCTOR HEALTH PROGRAMS
 ============================================================ */
 export const fetchDoctorHealthPrograms = async (token) => {
-  let result = []
-  const toastId = toast.loading("Loading...")
+  const toastId = toast.loading("Loading...");
+  let result = [];
 
   try {
     const response = await apiConnector(
       "GET",
       GET_ALL_DOCTOR_HEALTHPROGRAMS_API,
       null,
-      {
-        Authorization: `Bearer ${token}`,
-      }
-    )
-
-    console.log("DOCTOR HEALTH PROGRAMS RESPONSE:", response)
+      { Authorization: `Bearer ${token}` }
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could Not Fetch Doctor Health Programs")
+      throw new Error("Could Not Fetch Doctor Health Programs");
     }
 
-    result = response?.data?.data
-
+    result = response.data.data;
   } catch (error) {
-    console.log("DOCTOR HEALTH PROGRAMS ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
-
+  toast.dismiss(toastId);
+  return result;
+};
 
 /* ============================================================
-   📄 GET HEALTH PROGRAM DETAILS
+   📄 GET HEALTH PROGRAM DETAILS (PUBLIC)
 ============================================================ */
 export const fetchHealthProgramDetails = async (healthProgramId) => {
-  const toastId = toast.loading("Loading...")
-  let result = null
+  const toastId = toast.loading("Loading...");
+  let result = null;
 
   try {
     const response = await apiConnector(
       "POST",
       GET_HEALTHPROGRAM_DETAILS_API,
       { healthProgramId }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error(response.data.message)
+      throw new Error(response.data.message);
     }
 
-    result = response.data.data
+    result = response.data.data;
   } catch (error) {
-    console.error("GET_HEALTHPROGRAM_DETAILS_API ERROR:", error)
-    result = error?.response?.data
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
+  toast.dismiss(toastId);
+  return result;
+};
 
 /* ============================================================
-   🏷 GET HEALTH PROGRAM CATEGORIES (FIXED)
+   📄 GET FULL HEALTH PROGRAM DETAILS (AUTHENTICATED)
+============================================================ */
+export const fetchFullHealthProgramDetails = async (
+  healthProgramId,
+  token
+) => {
+  const toastId = toast.loading("Loading...");
+  let result = null;
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      GET_FULL_HEALTHPROGRAM_DETAILS_AUTHENTICATED_API,
+      { healthProgramId },
+      { Authorization: `Bearer ${token}` }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message);
+    }
+
+    result = response.data.data;
+  } catch (error) {
+    console.error(error);
+    toast.error(error?.response?.data?.message || error.message);
+  }
+
+  toast.dismiss(toastId);
+  return result;
+};
+
+/* ============================================================
+   🏷 GET HEALTH PROGRAM CATEGORIES
 ============================================================ */
 export const fetchHealthProgramCategories = async () => {
-  let result = []
+  let result = [];
 
   try {
     const response = await apiConnector(
       "GET",
       GET_ALL_CATEGORIES_API
-    )
+    );
 
     if (response?.data?.success) {
-      result = response.data.data
+      result = response.data.data;
     } else {
-      console.error("CATEGORY API FAILED:", response?.data)
+      throw new Error("Could not fetch categories");
     }
   } catch (error) {
-    console.error("CATEGORY API ERROR:", error)
-    toast.error("Could not fetch categories")
+    console.error(error);
+    toast.error(error.message);
   }
 
-  return result
-}
+  return result;
+};
 
 /* ============================================================
    ➕ CREATE HEALTH PROGRAM
 ============================================================ */
 export const addHealthProgramDetails = async (data, token) => {
-  const toastId = toast.loading("Creating program...")
-  let result = null
+  const toastId = toast.loading("Creating program...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -161,29 +187,29 @@ export const addHealthProgramDetails = async (data, token) => {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not create health program")
+      throw new Error("Could not create health program");
     }
 
-    toast.success("Health program created")
-    result = response.data.data
+    toast.success("Health program created");
+    result = response.data.data;
   } catch (error) {
-    console.error("CREATE_HEALTHPROGRAM_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
+  toast.dismiss(toastId);
+  return result;
+};
 
 /* ============================================================
    ✏️ EDIT HEALTH PROGRAM
 ============================================================ */
 export const editHealthProgramDetails = async (data, token) => {
-  const toastId = toast.loading("Updating program...")
-  let result = null
+  const toastId = toast.loading("Updating program...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -194,47 +220,28 @@ export const editHealthProgramDetails = async (data, token) => {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not update health program")
+      throw new Error("Could not update health program");
     }
 
-    toast.success("Health program updated")
-    result = response.data.data
+    toast.success("Health program updated");
+    result = response.data.data;
   } catch (error) {
-    console.error("EDIT_HEALTHPROGRAM_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
-
-// delete a HealthProgram
-export const deleteHealthProgram = async (data, token) => {
-  const toastId = toast.loading("Loading...")
-  try {
-    const response = await apiConnector("DELETE", DELETE_HEALTHPROGRAM_API, data, {
-      Authorization: `Bearer ${token}`,
-    })
-    console.log("DELETE HEALTH PROGRAM API RESPONSE............", response)
-    if (!response?.data?.success) {
-      throw new Error("Could Not Delete Health Program")
-    }
-    toast.success("Health Program Deleted")
-  } catch (error) {
-    console.log("DELETE HEALTH PROGRAM API ERROR............", error)
-    toast.error(error.message)
-  }
-  toast.dismiss(toastId)
-}
+  toast.dismiss(toastId);
+  return result;
+};
 /* ============================================================
-   🧩 SECTIONS
+   🧩 CREATE SECTION
 ============================================================ */
 export const createSection = async (data, token) => {
-  const toastId = toast.loading("Creating section...")
-  let result = null
+  const toastId = toast.loading("Creating section...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -242,30 +249,28 @@ export const createSection = async (data, token) => {
       CREATE_SECTION_API,
       data,
       { Authorization: `Bearer ${token}` }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not create section")
+      throw new Error("Could not create section");
     }
 
-    toast.success("Section created")
-
-    // 🔥 IMPORTANT FIX
-    result = response.data.data
-
+    toast.success("Section created");
+    result = response.data.data;
   } catch (error) {
-    console.error("CREATE_SECTION_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
-
-
+  toast.dismiss(toastId);
+  return result;
+};
+/* ============================================================
+   ✏️ UPDATE SECTION
+============================================================ */
 export const updateSection = async (data, token) => {
-  const toastId = toast.loading("Updating section...")
-  let result = null
+  const toastId = toast.loading("Updating section...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -273,29 +278,28 @@ export const updateSection = async (data, token) => {
       UPDATE_SECTION_API,
       data,
       { Authorization: `Bearer ${token}` }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not update section")
+      throw new Error("Could not update section");
     }
 
-    toast.success("Section updated")
-
-    result = response.data.data
-
+    toast.success("Section updated");
+    result = response.data.data;
   } catch (error) {
-    console.error("UPDATE_SECTION_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
-
-
+  toast.dismiss(toastId);
+  return result;
+};
+/* ============================================================
+   ❌ DELETE SECTION
+============================================================ */
 export const deleteSection = async (data, token) => {
-  const toastId = toast.loading("Deleting section...")
-  let result = null
+  const toastId = toast.loading("Deleting section...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -303,32 +307,55 @@ export const deleteSection = async (data, token) => {
       DELETE_SECTION_API,
       data,
       { Authorization: `Bearer ${token}` }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not delete section")
+      throw new Error("Could not delete section");
     }
 
-    toast.success("Section deleted")
-
-    result = response.data.data
-
+    toast.success("Section deleted");
+    result = response.data.data;
   } catch (error) {
-    console.error("DELETE_SECTION_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
-
+  toast.dismiss(toastId);
+  return result;
+};
 
 /* ============================================================
-   🧩 SUBSECTIONS
+   ❌ DELETE HEALTH PROGRAM
+============================================================ */
+export const deleteHealthProgram = async (data, token) => {
+  const toastId = toast.loading("Deleting...");
+  try {
+    const response = await apiConnector(
+      "DELETE",
+      DELETE_HEALTHPROGRAM_API,
+      data,
+      { Authorization: `Bearer ${token}` }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error("Could not delete health program");
+    }
+
+    toast.success("Health Program Deleted");
+  } catch (error) {
+    console.error(error);
+    toast.error(error.message);
+  }
+
+  toast.dismiss(toastId);
+};
+
+/* ============================================================
+   🧩 CREATE SUBSECTION
 ============================================================ */
 export const createSubSection = async (data, token) => {
-  const toastId = toast.loading("Adding session...")
-  let result = null
+  const toastId = toast.loading("Adding session...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -336,26 +363,29 @@ export const createSubSection = async (data, token) => {
       CREATE_SUBSECTION_API,
       data,
       { Authorization: `Bearer ${token}` }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not add session")
+      throw new Error("Could not add session");
     }
 
-    toast.success("Session added")
-    result = response.data.data
+    toast.success("Session added");
+    result = response.data.data;
   } catch (error) {
-    console.error("CREATE_SUBSECTION_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
+  toast.dismiss(toastId);
+  return result;
+};
 
+/* ============================================================
+   ✏️ UPDATE SUBSECTION
+============================================================ */
 export const updateSubSection = async (data, token) => {
-  const toastId = toast.loading("Updating session...")
-  let result = null
+  const toastId = toast.loading("Updating session...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -363,26 +393,29 @@ export const updateSubSection = async (data, token) => {
       UPDATE_SUBSECTION_API,
       data,
       { Authorization: `Bearer ${token}` }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not update session")
+      throw new Error("Could not update session");
     }
 
-    toast.success("Session updated")
-    result = response.data.data
+    toast.success("Session updated");
+    result = response.data.data;
   } catch (error) {
-    console.error("UPDATE_SUBSECTION_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
+  toast.dismiss(toastId);
+  return result;
+};
 
+/* ============================================================
+   ❌ DELETE SUBSECTION
+============================================================ */
 export const deleteSubSection = async (data, token) => {
-  const toastId = toast.loading("Deleting session...")
-  let result = null
+  const toastId = toast.loading("Deleting session...");
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -390,49 +423,49 @@ export const deleteSubSection = async (data, token) => {
       DELETE_SUBSECTION_API,
       data,
       { Authorization: `Bearer ${token}` }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not delete session")
+      throw new Error("Could not delete session");
     }
 
-    toast.success("Session deleted")
-    result = response.data.data
+    toast.success("Session deleted");
+    result = response.data.data;
   } catch (error) {
-    console.error("DELETE_SUBSECTION_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return result
-}
+  toast.dismiss(toastId);
+  return result;
+};
 
 /* ============================================================
-   ⭐ CREATE RATING
+   ✅ MARK LECTURE COMPLETE
 ============================================================ */
-export const createRating = async (data, token) => {
-  const toastId = toast.loading("Submitting review...")
-  let success = false
+export const markLectureAsComplete = async (data, token) => {
+  const toastId = toast.loading("Updating progress...");
+  let result = null;
 
   try {
     const response = await apiConnector(
       "POST",
-      CREATE_RATING_API,
+      UPDATE_HEALTHPROGRAM_PROGRESS_API,
       data,
       { Authorization: `Bearer ${token}` }
-    )
+    );
 
     if (!response?.data?.success) {
-      throw new Error("Could not submit review")
+      throw new Error("Could not update lecture progress");
     }
 
-    toast.success("Review submitted")
-    success = true
+    toast.success("Lecture marked as completed");
+    result = response.data;
   } catch (error) {
-    console.error("CREATE_RATING_API ERROR:", error)
-    toast.error(error.message)
+    console.error(error);
+    toast.error(error.message);
   }
 
-  toast.dismiss(toastId)
-  return success
-}
+  toast.dismiss(toastId);
+  return result;
+};

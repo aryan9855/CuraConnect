@@ -195,8 +195,19 @@ exports.getFullHealthProgramDetails = async (req, res) => {
       .populate("category")
       .populate({
         path: "healthProgramContent",
-        populate: { path: "subSection" },
+        model: "Section",
+        populate: {
+          path: "subSection",
+          model: "SubSection",
+        },
       });
+
+    if (!healthProgram) {
+      return res.status(404).json({
+        success: false,
+        message: "Health program not found",
+      });
+    }
 
     const progress = await HealthProgramProgress.findOne({
       healthProgramID: healthProgramId,
@@ -212,12 +223,14 @@ exports.getFullHealthProgramDetails = async (req, res) => {
     });
 
   } catch (error) {
+    console.error("FULL DETAILS ERROR:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
+
 
 
 // ================= DOCTOR HEALTH PROGRAMS =================

@@ -92,7 +92,7 @@ function HealthProgramBuilderForm() {
     if (
       sections.some(
         (section) =>
-          !section.SubSection || section.SubSection.length === 0
+          !section.subSection || section.subSection.length === 0
       )
     ) {
       toast.error("Please add atleast one lecture in each section")
