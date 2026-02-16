@@ -30,6 +30,7 @@ import { getUserDetails } from "./services/operations/SettingsAPI";
 import AddHealthProgram from "./components/core/Dashboard/AddHealthProgram";
 import EnrolledHealthPrograms from "./components/core/Dashboard/EnrolledHealthPrograms";
 import EditHealthProgram from "./components/core/Dashboard/EditHealthProgram/EditHealthProgram";
+import MyHealthPrograms from "./components/core/Dashboard/MyHealthPrograms";
 import Catalog from "./pages/Catalog";
 import HealthProgramDetails from "./pages/HealthProgramDetails";
 import ViewHealthProgram from "./pages/ViewHealthProgram";
@@ -168,7 +169,7 @@ function App() {
                 />
                 <Route
                   path="my-health-programs"
-                  element={<EnrolledHealthPrograms />}
+                  element={<MyHealthPrograms />}
                 />
                 <Route
                   path="edit-healthProgram/:healthProgramId"

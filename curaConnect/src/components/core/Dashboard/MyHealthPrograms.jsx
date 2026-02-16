@@ -28,7 +28,7 @@ function MyHealthPrograms() {
 
         <IconBtn
           text="Add Health Program"
-          onClick={() => navigate("/dashboard/add-healthPrograms")}
+          onClick={() => navigate("/dashboard/add-health-programs")}
         />
       </div>
 

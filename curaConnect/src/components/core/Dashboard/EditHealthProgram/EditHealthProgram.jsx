@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 import RenderSteps from "../AddHealthProgram/RenderSteps"
 import Loader from "../../HomePage/common/Loader"
 
-import { fetchHealthProgramDetails } from "../../../../services/operations/healthProgramDetailsAPI"
+import { fetchFullHealthProgramDetails } from "../../../../services/operations/healthProgramDetailsAPI"
 import {
   setEditHealthProgram,
   setHealthProgram,
@@ -25,15 +25,18 @@ function EditHealthProgram() {
       setLoading(true)
 
       try {
-        const result = await fetchHealthProgramDetails(
+        const result = await fetchFullHealthProgramDetails(
           healthProgramId,
           token
         )
 
-        // IMPORTANT: adjust this according to backend response
-        if (result?.healthProgramDetails) {
+        const healthProgramDetails = result?.healthProgram
+
+        if (healthProgramDetails) {
           dispatch(setEditHealthProgram(true))
-          dispatch(setHealthProgram(result.healthProgramDetails))
+          dispatch(setHealthProgram(healthProgramDetails))
+        } else {
+          dispatch(setHealthProgram(null))
         }
       } catch (error) {
         console.error("Error fetching health program details:", error)

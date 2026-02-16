@@ -108,6 +108,9 @@ const categoryPageDetails = async (req, res) => {
         .populate({
           path: "healthPrograms",
           match: { status: "Published" },
+          populate: {
+            path: "doctor",
+          },
         })
         .exec()
     }
@@ -116,6 +119,9 @@ const categoryPageDetails = async (req, res) => {
     const allCategories = await Category.find().populate({
       path: "healthPrograms",
       match: { status: "Published" },
+      populate: {
+        path: "doctor",
+      },
     })
 
     const allHealthPrograms = allCategories.flatMap(

@@ -34,9 +34,14 @@ function HealthProgram_Card({ healthProgram, Height = "h-[220px]" }) {
           </h3>
 
           <p className="text-sm text-richblack-400">
-            {healthProgram?.doctor
-              ? `${healthProgram.doctor.firstName} ${healthProgram.doctor.lastName}`
-              : "By Expert"}
+            {(() => {
+              const firstName = healthProgram?.doctor?.firstName;
+              const lastName = healthProgram?.doctor?.lastName;
+              const doctorName = [firstName, lastName]
+                .filter(Boolean)
+                .join(" ");
+              return doctorName || "By Expert";
+            })()}
           </p>
 
           {/* ⭐ Rating Section */}
