@@ -108,29 +108,28 @@ Passionate about scalable web applications 🚀
 
 ### 🏠 Homepage
 <p align="center">
-  <img src="https://raw.githubusercontent.com/aryan9855/CuraConnect/main/screenshots/home1.png" width="800" />
+  <img src="../screenshots/home1.png" width="800" />
   <br/><br/>
-  <img src="https://raw.githubusercontent.com/aryan9855/CuraConnect/main/screenshots/home2.png" width="800" />
+  <img src="../screenshots/home2.png" width="800" />
 </p>
 
 ### 🔐 Login
 <p align="center">
-  <img src="https://raw.githubusercontent.com/aryan9855/CuraConnect/main/screenshots/l1.png" width="800" />
+  <img src="../screenshots/l1.png" width="800" />
 </p>
 
 ### 📚 Catalog
 <p align="center">
-  <img src="https://raw.githubusercontent.com/aryan9855/CuraConnect/main/screenshots/c1.png" width="800" />
+  <img src="../screenshots/c1.png" width="800" />
 </p>
 
 ### 🔎 About Us
 <p align="center">
-  <img src="https://raw.githubusercontent.com/aryan9855/CuraConnect/main/screenshots/a1.png" width="800" />
+  <img src="../screenshots/a1.png" width="800" />
 </p>
 
 ### 📘 Health Program Page
 <p align="center">
-  <img src="https://raw.githubusercontent.com/aryan9855/CuraConnect/main/screenshots/c2.png" width="800" />
+  <img src="../screenshots/c2.png" width="800" />
 </p>
-
 
