@@ -108,28 +108,27 @@ Passionate about scalable web applications 🚀
 
 ### 🏠 Homepage
 <p align="center">
-  <img src="../screenshots/home1.png" width="800" />
+  <img src="screenshots/home1.png" width="800" />
   <br/><br/>
-  <img src="../screenshots/home2.png" width="800" />
+  <img src="screenshots/home2.png" width="800" />
 </p>
 
 ### 🔐 Login
 <p align="center">
-  <img src="../screenshots/l1.png" width="800" />
+  <img src="screenshots/l1.png" width="800" />
 </p>
 
 ### 📚 Catalog
 <p align="center">
-  <img src="../screenshots/c1.png" width="800" />
+  <img src="screenshots/c1.png" width="800" />
 </p>
 
 ### 🔎 About Us
 <p align="center">
-  <img src="../screenshots/a1.png" width="800" />
+  <img src="screenshots/a1.png" width="800" />
 </p>
 
 ### 📘 Health Program Page
 <p align="center">
-  <img src="../screenshots/c2.png" width="800" />
+  <img src="screenshots/c2.png" width="800" />
 </p>
-
