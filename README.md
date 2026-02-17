@@ -50,11 +50,11 @@ CuraConnect is a scalable MERN stack healthcare platform that allows users to:
 
 ## 🏗 System Architecture
 Frontend (React + Redux)
-↓
+→
 REST API (Express.js)
-↓
+→
 MongoDB Atlas Database
-↓
+→
 Cloudinary (Media) & Razorpay (Payments)
 
 ---
@@ -132,4 +132,5 @@ Passionate about scalable web applications 🚀
 <p align="center">
   <img src="screenshorts/c2.png" width="800" />
 </p>
+
 
