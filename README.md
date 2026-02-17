@@ -1,96 +1,140 @@
-﻿#CuraConnect — Full-Stack Healthcare Platform
-CuraConnect is a production-ready MERN stack healthcare platform that enables users to explore medical programs, connect with experts, watch health-related video content, and securely enroll through online payments.
+<h1 align="center">🏥 CuraConnect</h1>
 
-🔗 Live Frontend: https://cura-connect-main.vercel.app
+<p align="center">
+  A Production-Ready Full-Stack Healthcare Platform (MERN)
+</p>
 
-🔗 Live Backend: https://cura-connect-five.vercel.app
+<p align="center">
+  <a href="https://cura-connect-main.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/Live-Demo-green?style=for-the-badge" />
+  </a>
+  <a href="https://cura-connect-five.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/Backend-API-blue?style=for-the-badge" />
+  </a>
+</p>
 
-🚀 Features
+---
 
-🔐 JWT-based Authentication & Role-Based Access (Patient / Doctor)
+## 🚀 Overview
 
-📚 Health Program Creation & Enrollment
+CuraConnect is a scalable MERN stack healthcare platform that allows users to:
 
-🎥 Video Content Management
+- 🔐 Register & authenticate securely  
+- 📚 Explore health programs  
+- 🎥 Access expert-led video content  
+- 💳 Enroll via Razorpay payments  
+- ☁️ Upload media via Cloudinary  
+- 📊 Manage dashboards (Doctor / Patient)
 
-💳 Razorpay Payment Integration
+---
 
-☁️ Cloudinary Media Upload
+## 🧠 Tech Stack
 
-⭐ Ratings & Reviews System
+### 🖥 Frontend
+- React.js  
+- Redux Toolkit  
+- Vite  
+- Tailwind CSS  
+- React Router  
 
-📊 Doctor Dashboard & Program Analytics
+### ⚙ Backend
+- Node.js  
+- Express.js  
+- MongoDB Atlas  
+- REST APIs  
+- JWT Authentication  
+- Razorpay  
+- Cloudinary  
 
-🛒 Cart System with Redux State Management
+---
 
-🌐 Fully Deployed on Vercel (Frontend & Backend)
+## 🏗 System Architecture
+Frontend (React + Redux)
+↓
+REST API (Express.js)
+↓
+MongoDB Atlas Database
+↓
+Cloudinary (Media) & Razorpay (Payments)
 
-🛠 Tech Stack
+---
 
-Frontend
+## 🔐 Key Features
 
-React.js
+✔ JWT-Based Authentication  
+✔ Role-Based Authorization (Doctor / Patient)  
+✔ Secure Payment Verification  
+✔ Scalable MVC Backend Architecture  
+✔ Global State Management (Redux Toolkit)  
+✔ Production Deployment on Vercel  
 
-Redux Toolkit
+---
 
-Vite
+## 🌍 Live Deployment
 
-Tailwind CSS
+🔗 Frontend:  
+https://cura-connect-main.vercel.app  
 
-React Router
+🔗 Backend:  
+https://cura-connect-five.vercel.app  
 
-Backend
+---
 
-Node.js
+## ⚙️ Local Setup
 
-Express.js
 
-MongoDB Atlas
+# Clone
+git clone https://github.com/aryan9855/CuraConnect.git
 
-REST APIs
+# Backend
+cd Server
+npm install
+npm run dev
 
-JWT Authentication
 
-Razorpay
 
-Cloudinary
+# Frontend
+cd curaConnect
+npm install
+npm run dev
+👨‍💻 Developer
 
-Express File Upload
+Aryan Singhal
+Full-Stack MERN Developer
+Passionate about scalable web applications 🚀
 
-Project Architecture
-curaConnect/
-│
-├── Server/                # Express Backend (API, Auth, Payments)
-│   ├── routes/
-│   ├── controllers/
-│   ├── models/
-│   ├── config/
-│   └── index.js
-│
-├── curaConnect/           # React Frontend (Vite + Redux)
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
 
-Authentication & Security
+## 📸 Screenshots
 
-JWT-based secure authentication
+### 🏠 Homepage
+<p align="center">
+  <img src="./screenshots/home1.png" width="800" />
+</p>
 
-Role-based route protection
+<p align="center">
+  <img src="./screenshots/home2.png" width="800" />
+</p>
 
-Secure CORS configuration
+### 📚 Login
+<p align="center">
+  <img src="./screenshots/l1.png" width="800" />
+</p>
 
-Environment variable protection
+### 📊 Catalog
+<p align="center">
+  <img src="./screenshots/c1.png" width="800" />
+</p>
 
-Cookie-based session handling
+### 🔐 About Us
+<p align="center">
+  <img src="./screenshots/a1.png" width="800" />
+</p>
 
-💳 Payment Workflow
+### 📚 Health Program Page
+<p align="center">
+  <img src="./screenshots/c2.png" width="800" />
+</p>
 
-Razorpay order creation via backend
 
-Secure verification of payment signature
 
-Automatic enrollment upon successful transaction
 
-Transaction email confirmation
