@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../../../assets/Images/CuraConnectLogo.png";
 
 
 function ECGCard() {
@@ -22,13 +21,8 @@ function ECGCard() {
 
       {/* Header */}
       <div className="relative flex justify-between items-center mb-5">
-        <div className="flex items-center gap-3">
-          {/* Logo */}
-          <img
-            src={logo}
-            alt="CuraConnect Logo"
-            className="w-10 h-10 rounded-3xl object-contain bg-white/10 p-1"
-          />
+        <div >
+          
 
           {/* Brand Name */}
           <span
