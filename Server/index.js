@@ -28,12 +28,11 @@ database.connect();
 app.use(express.json());
 app.use(cookieParser());
 
+// ✅ CORS (Temporary: allow all origins for deployment)
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite frontend
-    credentials: true,               // allow cookies
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: true, // allow all origins (we'll restrict later)
+    credentials: true,
   })
 );
 
@@ -73,7 +72,5 @@ app.get("/", (req, res) => {
 // Start Server
 // ==============================
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
-
-
