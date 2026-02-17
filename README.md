@@ -82,21 +82,19 @@ https://cura-connect-five.vercel.app
 
 ## ⚙️ Local Setup
 
-
-# Clone
+### Clone Repository
+```bash
 git clone https://github.com/aryan9855/CuraConnect.git
-
-# Backend
+```
 cd Server
 npm install
 npm run dev
 
-
-
-# Frontend
 cd curaConnect
 npm install
 npm run dev
+
+
 👨‍💻 Developer
 
 Aryan Singhal
@@ -104,37 +102,33 @@ Full-Stack MERN Developer
 Passionate about scalable web applications 🚀
 
 
+---
+
 ## 📸 Screenshots
 
 ### 🏠 Homepage
 <p align="center">
   <img src="./screenshots/home1.png" width="800" />
-</p>
-
-<p align="center">
+  <br/><br/>
   <img src="./screenshots/home2.png" width="800" />
 </p>
 
-### 📚 Login
+### 🔐 Login
 <p align="center">
   <img src="./screenshots/l1.png" width="800" />
 </p>
 
-### 📊 Catalog
+### 📚 Catalog
 <p align="center">
   <img src="./screenshots/c1.png" width="800" />
 </p>
 
-### 🔐 About Us
+### 🔎 About Us
 <p align="center">
   <img src="./screenshots/a1.png" width="800" />
 </p>
 
-### 📚 Health Program Page
+### 📘 Health Program Page
 <p align="center">
   <img src="./screenshots/c2.png" width="800" />
 </p>
-
-
-
-
