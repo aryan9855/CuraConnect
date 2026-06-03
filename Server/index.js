@@ -25,7 +25,7 @@ database.connect();
 // ==============================
 // Middlewares
 // ==============================
-app.use(express.json());
+app.use(express.json());//This middleware converts incoming JSON data into a JavaScript object.
 app.use(cookieParser());
 
 // ✅ CORS (Temporary: allow all origins for deployment)
@@ -34,7 +34,7 @@ app.use(
     origin: true, // allow all origins (we'll restrict later)
     credentials: true,
   })
-);
+);  //CORS is a security feature that allows or restricts the resources a web page can request from another domain. 
 
 // File upload middleware
 app.use(

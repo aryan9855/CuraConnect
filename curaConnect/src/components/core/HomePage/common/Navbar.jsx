@@ -32,10 +32,9 @@ function Navbar() {
           {},
           false
         ) // catalog
-        console.log("Printing SubLinks results :", result)
         setSubLinks(result.data.data)
       } catch (error) {
-        console.log("Couldnot fet the category list")
+        // Silent catch for category list fetching errors
       }
     }
 

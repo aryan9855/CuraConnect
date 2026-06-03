@@ -6,9 +6,6 @@ import { setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiconnector"
 import { endpoints } from "../apis"
 
-console.log("ENV:", import.meta.env);
-console.log("BASE:", import.meta.env.VITE_BASE_URL);
-
 const {
   SEND_OTP_API,
   SIGNUP_API,

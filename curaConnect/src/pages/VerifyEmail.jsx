@@ -44,11 +44,6 @@ function VerifyEmail() {
       password,
       confirmPassword,
     } = signupData
-
-    console.log("SIGNUP DATA:", signupData)
-    console.log("OTP:", otp)
-    console.log("FINAL ACCOUNT TYPE:", accountType)
-
     dispatch(
       signUp(
         accountType,
